@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>퇴직금 계산기 | Paylab 계산기</title>
+    <meta name="description" content="월급, 상여금, 연차수당, 근속기간을 입력해 예상 퇴직금을 계산하세요." />
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="../index.html">Paylab 계산기</a>
+      <nav><a href="../index.html#calculator">계산기</a><a href="../index.html#salary-table">연봉표</a></nav>
+    </header>
+    <main class="tool-page" data-calculator="severance">
+      <a class="back-link" href="../index.html#calculator-menu">← 계산기 메뉴</a>
+      <section class="hero compact-hero">
+        <div class="hero-copy">
+          <h1>퇴직금 계산기</h1>
+          <p>퇴직 전 임금, 상여금, 연차수당, 근속기간으로 예상 퇴직금을 계산합니다.</p>
+        </div>
+      </section>
+      <div class="ad-slot">광고 영역</div>
+      <section class="tool-layout">
+        <form class="tool-card tool-form">
+          <label><span>월 기본급·수당</span><div class="input-wrap"><input data-field="monthlyPay" inputmode="numeric" value="3,500,000" /><span>원</span></div></label>
+          <label><span>연간 상여금</span><div class="input-wrap"><input data-field="annualBonus" inputmode="numeric" value="6,000,000" /><span>원</span></div></label>
+          <label><span>연간 연차수당</span><div class="input-wrap"><input data-field="annualLeavePay" inputmode="numeric" value="1,000,000" /><span>원</span></div></label>
+          <label><span>근속개월</span><input data-field="months" type="number" value="36" /></label>
+          <button class="primary" type="submit">계산하기</button>
+        </form>
+        <section class="tool-result" aria-live="polite">
+          <p>예상 퇴직금</p>
+          <strong data-main-result>0원</strong>
+          <dl class="result-list" data-breakdown></dl>
+          <p class="notice">평균임금에는 임금, 상여금, 연차수당 등이 포함될 수 있으며 회사 산정 방식에 따라 달라질 수 있습니다.</p>
+        </section>
+      </section>
+      <article class="article-box">
+        <h2>퇴직금 계산 기준</h2>
+        <p>퇴직금은 계속근로기간 1년에 대해 30일분 이상의 평균임금을 지급하는 구조입니다. 이 계산기는 월 임금에 연간 상여금과 연차수당을 월 환산해 평균임금에 반영합니다.</p>
+      </article>
+    </main>
+    <script src="../tools.js"></script>
+  </body>
+</html>
