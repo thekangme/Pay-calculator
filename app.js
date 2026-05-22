@@ -218,6 +218,32 @@ function setMode(mode) {
   calculate();
 }
 
+function insertMainResetButton() {
+  const submit = els.form.querySelector('button[type="submit"]');
+  if (!submit || els.form.querySelector(".reset-small")) return;
+
+  const row = document.createElement("div");
+  row.className = "button-row";
+  const reset = document.createElement("button");
+  reset.className = "reset-small";
+  reset.type = "button";
+  reset.textContent = "초기화";
+
+  submit.parentNode.insertBefore(row, submit);
+  row.append(reset, submit);
+
+  reset.addEventListener("click", () => {
+    els.annualSalary.value = "50,000,000";
+    els.taxFreeMonthly.value = "200,000";
+    els.dependents.value = "1";
+    els.withholdingRate.value = "1";
+    els.bonusAmount.value = "10,000,000";
+    els.taxableAnnual.value = "58,000,000";
+    els.includeBonusInsurance.checked = true;
+    calculate();
+  });
+}
+
 [els.annualSalary, els.taxFreeMonthly, els.bonusAmount, els.taxableAnnual].forEach((input) => {
   input.addEventListener("input", formatInput);
   input.addEventListener("change", calculate);
@@ -241,4 +267,5 @@ document.querySelectorAll("[data-mode]").forEach((link) => {
 });
 
 renderSalaryTable();
+insertMainResetButton();
 calculate();

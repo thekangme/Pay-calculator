@@ -52,7 +52,11 @@ function insurance(monthlyPay) {
 
 function fields(form) {
   return [...form.querySelectorAll("[data-field]")].reduce((data, input) => {
-    data[input.dataset.field] = input.dataset.kind === "text" ? input.value : num(input.value);
+    if (input.dataset.kind === "checkbox") {
+      data[input.dataset.field] = input.checked ? "yes" : "no";
+    } else {
+      data[input.dataset.field] = input.dataset.kind === "text" ? input.value : num(input.value);
+    }
     return data;
   }, {});
 }
@@ -172,22 +176,115 @@ const calculators = {
   },
   basicPension(data) {
     const criteria = data.household === "couple" ? { threshold: 3648000, base: 274010 } : { threshold: 2280000, base: 342510 };
-    const earnedEval = Math.max(0, (data.monthlyIncome - 1100000) * 0.7);
-    const pensionIncome = data.nationalPension;
-    const assetBase = Math.max(0, data.asset + Math.max(0, data.financialAsset - 20000000) - data.debt - 85000000);
+    const baseAssets = { city: 135000000, town: 85000000, rural: 72500000 };
+    const earnedEval = Math.max(0, (data.earnedIncome - 1100000) * 0.7);
+    const spouseEarnedEval = data.household === "couple" ? Math.max(0, (data.spouseEarned - 1100000) * 0.7) : 0;
+    const publicIncome = data.npIncome + data.otherPublicIncome + data.disabilityPension;
+    const freeRentIncome = data.freeRentApply === "yes" && data.freeRentValue >= 600000000 ? data.freeRentValue * 0.0078 / 12 : 0;
+    const incomeEval = earnedEval + spouseEarnedEval + data.businessIncome + data.rentalIncome + data.interestIncome + publicIncome + data.spouseOther + freeRentIncome;
+    const generalAsset = data.assetBuilding + data.assetLand + data.assetDeposit + data.assetOther;
+    const generalNet = Math.max(0, generalAsset - (baseAssets[data.region] || baseAssets.town));
+    const financialNet = Math.max(0, data.financialAsset - 20000000);
+    const debt = data.debtLoan + data.debtDeposit;
+    const isLuxuryCar = data.carCC >= 4000 || data.carValue >= 30000000;
+    const carAsset = isLuxuryCar ? (data.carLivelihood === "yes" ? data.carValue * 0.5 : data.carValue) : 0;
+    const assetBase = Math.max(0, generalNet + financialNet - debt) + data.assetVessel + data.assetMembership + carAsset;
     const assetIncome = assetBase * (0.04 / 12);
-    const recognized = earnedEval + pensionIncome + assetIncome;
+    const recognized = incomeEval + assetIncome;
     const eligible = data.age >= 65 && recognized <= criteria.threshold;
-    const nationalPensionDeduction = Math.max(0, Math.min(criteria.base * 0.5, (pensionIncome - criteria.base * 1.5) * 0.5));
-    const expected = eligible ? Math.max(criteria.base * 0.1, criteria.base - nationalPensionDeduction) : 0;
-    render(expected, [["수급 가능성", eligible ? "가능성 있음" : "기준 초과 또는 연령 미달"], ["소득평가액", earnedEval + pensionIncome], ["재산 소득환산액", assetIncome], ["소득인정액", recognized], ["선정기준액", criteria.threshold]]);
+    const nationalPensionDeduction = Math.max(0, Math.min(criteria.base * 0.5, (data.npIncome - criteria.base * 1.5) * 0.5));
+    let expected = eligible ? Math.max(criteria.base * 0.1, criteria.base - nationalPensionDeduction) : 0;
+    if (eligible && data.household === "couple" && data.spouseApply === "yes") {
+      expected *= 0.8;
+    }
+    render(expected, [
+      ["수급 가능성", eligible ? "가능성 있음" : "기준 초과 또는 연령 미달"],
+      ["소득평가액", incomeEval],
+      ["재산 소득환산액", assetIncome],
+      ["일반재산 합계", generalAsset],
+      ["금융재산 공제 후", financialNet],
+      ["부채 차감", debt],
+      ["고급자동차 반영액", carAsset],
+      ["소득인정액", recognized],
+      ["선정기준액", criteria.threshold],
+    ]);
   },
 };
+
+const menuLinks = [
+  ["./index.html#calculator", "연봉 실수령액"],
+  ["./index.html#calculator", "성과급 세금"],
+  ["./index.html#salary-table", "연봉표"],
+  ["./severance.html", "퇴직금"],
+  ["./inheritance-tax.html", "상속세"],
+  ["./gift-tax.html", "증여세"],
+  ["./year-end-tax.html", "연말정산"],
+  ["./unemployment.html", "실업급여"],
+  ["./weekly-holiday.html", "주휴수당"],
+  ["./monthly-pay.html", "월급 계산기"],
+  ["./hourly-wage.html", "시급 계산기"],
+  ["./retirement-income-tax.html", "퇴직소득세"],
+  ["./global-income-tax.html", "종합소득세"],
+  ["./capital-gains-tax.html", "양도소득세"],
+  ["./national-pension.html", "국민연금"],
+  ["./health-insurance.html", "건강보험"],
+  ["./parental-leave.html", "육아휴직급여"],
+  ["./basic-pension.html", "기초연금"],
+];
+
+function insertToolMenu() {
+  const main = document.querySelector("[data-calculator]");
+  const hero = document.querySelector(".hero");
+  if (!main || !hero || document.querySelector(".tool-menu-band")) return;
+
+  const current = location.pathname.split("/").pop();
+  const links = menuLinks
+    .map(([href, label]) => `<a href="${href}"${href.endsWith(current) ? ' class="active"' : ""}>${label}</a>`)
+    .join("");
+
+  hero.insertAdjacentHTML(
+    "afterend",
+    `<section class="tool-menu-band" aria-label="계산기 전체 메뉴"><nav class="calculator-menu">${links}</nav></section>`
+  );
+}
+
+function insertResetButton(form) {
+  const submit = form.querySelector('button[type="submit"]');
+  if (!submit || form.querySelector(".reset-small")) return;
+
+  const row = document.createElement("div");
+  row.className = "button-row";
+  const reset = document.createElement("button");
+  reset.className = "reset-small";
+  reset.type = "button";
+  reset.textContent = "초기화";
+
+  submit.parentNode.insertBefore(row, submit);
+  row.append(reset, submit);
+
+  reset.addEventListener("click", () => {
+    form.querySelectorAll("[data-field]").forEach((input) => {
+      if (input.tagName === "SELECT") {
+        input.selectedIndex = 0;
+      } else if (input.type === "checkbox") {
+        input.checked = input.defaultChecked;
+      } else if (input.type === "number") {
+        input.value = input.defaultValue || "";
+      } else {
+        input.value = "";
+      }
+    });
+    calculators[type](fields(form));
+  });
+}
 
 const form = document.querySelector(".tool-form");
 const type = document.querySelector("[data-calculator]")?.dataset.calculator;
 
 if (form && calculators[type]) {
+  insertToolMenu();
+  insertResetButton(form);
+
   form.querySelectorAll("[data-field]").forEach((input) => {
     if (input.inputMode === "numeric") {
       input.addEventListener("input", () => {

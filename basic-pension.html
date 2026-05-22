@@ -27,8 +27,31 @@
         </div>
       </section>
 
+      <section class="criteria-grid" aria-label="2026년 기초연금 계산 기준">
+        <article>
+          <span>단독가구 선정기준액</span>
+          <strong>2,280,000원</strong>
+          <small>월 소득인정액 이하 시 수급</small>
+        </article>
+        <article>
+          <span>부부가구 선정기준액</span>
+          <strong>3,648,000원</strong>
+          <small>부부 합산 기준</small>
+        </article>
+        <article>
+          <span>기준연금액 (단독)</span>
+          <strong>342,510원</strong>
+          <small>최대 수령액</small>
+        </article>
+        <article>
+          <span>기준연금액 (부부각각)</span>
+          <strong>274,010원</strong>
+          <small>부부감액 20% 적용</small>
+        </article>
+      </section>
+
       <section class="tool-layout">
-        <form class="tool-card tool-form">
+        <form class="tool-card tool-form compact-form">
           <label>
             <span>가구 유형</span>
             <select data-field="household" data-kind="text">
@@ -38,27 +61,157 @@
           </label>
           <label>
             <span>나이</span>
+            <small class="field-note">만 65세 이상부터 신청 가능합니다.</small>
             <input data-field="age" type="number" value="65" min="0" />
           </label>
           <label>
-            <span>월 근로·사업소득</span>
-            <div class="input-wrap"><input data-field="monthlyIncome" inputmode="numeric" placeholder="예: 1,500,000" /><span>원</span></div>
+            <span>거주 지역</span>
+            <small class="field-note">지역에 따라 기본재산 공제액이 달라집니다. 대도시 1억3,500만원 / 중소도시 8,500만원 / 농어촌 7,250만원</small>
+            <select data-field="region" data-kind="text">
+              <option value="city">대도시</option>
+              <option value="town" selected>중소도시 (시 지역)</option>
+              <option value="rural">농어촌</option>
+            </select>
+          </label>
+
+          <h2 class="form-subhead">① 근로소득</h2>
+          <label>
+            <span>근로소득 <em>월</em></span>
+            <small class="field-note">일용직·임시직·상용직 등 모든 근로에서 발생하는 월 세전 급여입니다. (근로소득 − 110만원) × 70% = 소득평가 반영액. 월 110만원 이하는 소득에 포함되지 않습니다.</small>
+            <div class="input-wrap"><input data-field="earnedIncome" inputmode="numeric" placeholder="예: 1,500,000" /><span>원</span></div>
           </label>
           <label>
-            <span>월 국민연금 수령액</span>
-            <div class="input-wrap"><input data-field="nationalPension" inputmode="numeric" placeholder="예: 400,000" /><span>원</span></div>
+            <span>배우자 근로소득 <em>월</em></span>
+            <small class="field-note">부부가구일 때 배우자의 월 세전 근로소득을 입력합니다. 동일하게 110만원 공제 후 70%만 반영합니다.</small>
+            <div class="input-wrap"><input data-field="spouseEarned" inputmode="numeric" placeholder="부부가구일 때 입력" /><span>원</span></div>
+          </label>
+
+          <h2 class="form-subhead">② 사업소득</h2>
+          <label>
+            <span>사업소득 <em>월</em></span>
+            <small class="field-note">농업·임업·어업·기타 사업에서 발생하는 월 순수익입니다. 필요경비를 제외한 실제 수익 금액을 입력하세요.</small>
+            <div class="input-wrap"><input data-field="businessIncome" inputmode="numeric" placeholder="월 사업소득" /><span>원</span></div>
+          </label>
+
+          <h2 class="form-subhead">③ 재산소득</h2>
+          <label>
+            <span>임대소득 <em>월</em></span>
+            <small class="field-note">부동산·동산 임대로 발생하는 월 임대수입입니다. 전세보증금은 아래 재산 항목의 임차보증금에 별도 반영됩니다.</small>
+            <div class="input-wrap"><input data-field="rentalIncome" inputmode="numeric" placeholder="월 임대소득" /><span>원</span></div>
           </label>
           <label>
-            <span>일반재산</span>
-            <div class="input-wrap"><input data-field="asset" inputmode="numeric" placeholder="예: 120,000,000" /><span>원</span></div>
+            <span>이자·배당소득 <em>월</em></span>
+            <small class="field-note">예금이자, 주식 배당금 등 금융자산에서 발생하는 월 소득입니다. 금융재산 원금은 아래 재산 항목에서 별도 입력하세요.</small>
+            <div class="input-wrap"><input data-field="interestIncome" inputmode="numeric" placeholder="월 이자·배당소득" /><span>원</span></div>
+          </label>
+
+          <h2 class="form-subhead">④ 공적이전소득</h2>
+          <label>
+            <span>국민연금 수령액 <em>월</em></span>
+            <small class="field-note">노령연금, 장애연금, 유족연금 등 국민연금에서 받는 월 수령액입니다. 기준연금액 × 150% 초과분 × 50% = 연계감액. 수령액이 약 51만원 초과 시 기초연금 감액이 적용됩니다.</small>
+            <div class="input-wrap"><input data-field="npIncome" inputmode="numeric" placeholder="예: 400,000" /><span>원</span></div>
           </label>
           <label>
-            <span>금융재산</span>
-            <div class="input-wrap"><input data-field="financialAsset" inputmode="numeric" placeholder="예: 20,000,000" /><span>원</span></div>
+            <span>장애인연금 <em>월</em></span>
+            <small class="field-note">장애인연금법에 의한 기초급여 및 부가급여 합산액입니다. 장애수당, 장애아동수당은 포함되지 않습니다.</small>
+            <div class="input-wrap"><input data-field="disabilityPension" inputmode="numeric" placeholder="월 수령액" /><span>원</span></div>
           </label>
           <label>
-            <span>부채</span>
-            <div class="input-wrap"><input data-field="debt" inputmode="numeric" placeholder="예: 30,000,000" /><span>원</span></div>
+            <span>각종 급여·연금 <em>월</em></span>
+            <small class="field-note">공무원·군인·사학·별정우체국 연금, 산재급여, 실업급여 등 기타 공적기관에서 받는 급여의 합계입니다.</small>
+            <div class="input-wrap"><input data-field="otherPublicIncome" inputmode="numeric" placeholder="월 수령액" /><span>원</span></div>
+          </label>
+
+          <h2 class="form-subhead">⑤ 무료임차소득</h2>
+          <label>
+            <span>자녀 소유 주택 무료 거주 <em>자동산정</em></span>
+            <small class="field-note">시가표준액 6억원 이상 자녀 소유 주택에 무상으로 거주 중인 경우, 해당 주택 시가표준액의 연 0.78% ÷ 12를 소득으로 간주합니다. 무료임차소득 = 시가표준액 × 0.78% ÷ 12</small>
+            <label class="inline-check">
+              <input data-field="freeRentApply" data-kind="checkbox" type="checkbox" />
+              <span>자녀 소유 주택에 무료 거주 중</span>
+            </label>
+          </label>
+          <label>
+            <span>무료임차 주택 시가표준액</span>
+            <div class="input-wrap"><input data-field="freeRentValue" inputmode="numeric" placeholder="6억원 이상일 때 반영" /><span>원</span></div>
+          </label>
+          <label>
+            <span>배우자 기초연금 신청</span>
+            <select data-field="spouseApply" data-kind="text">
+              <option value="yes" selected>함께 신청</option>
+              <option value="no">신청 안 함</option>
+            </select>
+          </label>
+
+          <h2 class="form-subhead">① 일반재산 (기본재산액 공제 후 환산)</h2>
+          <label>
+            <span>건축물 <em>공시가격</em></span>
+            <small class="field-note">주택, 건물, 상가 등 건축물의 시가표준액(공시가격)을 입력하세요. 실거래가·시세가 아닌 공시가격 기준입니다.</small>
+            <div class="input-wrap"><input data-field="assetBuilding" inputmode="numeric" placeholder="시가표준액" /><span>원</span></div>
+          </label>
+          <label>
+            <span>토지 <em>공시지가</em></span>
+            <small class="field-note">전·답·임야·대지 등 토지의 개별공시지가 합계입니다. 건축물 부속 토지도 별도로 입력하세요.</small>
+            <div class="input-wrap"><input data-field="assetLand" inputmode="numeric" placeholder="시가표준액" /><span>원</span></div>
+          </label>
+          <label>
+            <span>임차보증금 <em>전·월세</em></span>
+            <small class="field-note">전세·월세 보증금으로 맡긴 금액 전체입니다. 임차보증금 전액이 일반재산에 포함됩니다.</small>
+            <div class="input-wrap"><input data-field="assetDeposit" inputmode="numeric" placeholder="임차보증금" /><span>원</span></div>
+          </label>
+          <label>
+            <span>기타 일반재산</span>
+            <small class="field-note">어업권, 광업권, 양식업권 등 기타 재산 합계입니다.</small>
+            <div class="input-wrap"><input data-field="assetOther" inputmode="numeric" placeholder="기타 재산" /><span>원</span></div>
+          </label>
+
+          <h2 class="form-subhead">② 금융재산 (2,000만원 공제 후 환산)</h2>
+          <label>
+            <span>금융재산 합계</span>
+            <small class="field-note">예금, 적금, 주식, 채권, 보험 해지환급금, 연금저축 등 모든 금융자산 합계입니다. (금융재산 − 2,000만원) × 연 4% ÷ 12 = 월 환산액. 생활준비금 명목으로 2,000만원은 공제됩니다.</small>
+            <div class="input-wrap"><input data-field="financialAsset" inputmode="numeric" placeholder="예금·주식·보험 등" /><span>원</span></div>
+          </label>
+
+          <h2 class="form-subhead">③ 부채 (재산에서 차감)</h2>
+          <label>
+            <span>금융기관 대출</span>
+            <small class="field-note">은행·보험·카드사 등 금융기관의 대출 잔액 합계입니다. 부채는 일반재산·금융재산 합계에서 차감합니다.</small>
+            <div class="input-wrap"><input data-field="debtLoan" inputmode="numeric" placeholder="대출잔액" /><span>원</span></div>
+          </label>
+          <label>
+            <span>임대보증금 반환채무</span>
+            <small class="field-note">본인 소유 부동산에 세입자가 맡긴 전·월세 보증금 반환 의무 금액입니다.</small>
+            <div class="input-wrap"><input data-field="debtDeposit" inputmode="numeric" placeholder="반환채무" /><span>원</span></div>
+          </label>
+
+          <h2 class="form-subhead">④ 기타 재산 (기본재산 공제 없이 전액 환산)</h2>
+          <label>
+            <span>항공기 / 선박</span>
+            <small class="field-note">소유 중인 항공기 또는 선박의 공시가격(시가표준액)입니다. 기본재산 공제 없이 전액이 소득환산 대상에 포함됩니다.</small>
+            <div class="input-wrap"><input data-field="assetVessel" inputmode="numeric" placeholder="시가표준액" /><span>원</span></div>
+          </label>
+          <label>
+            <span>회원권</span>
+            <small class="field-note">골프, 콘도, 헬스, 요트 등 각종 회원권의 시가표준액입니다. 기본재산 공제 없이 전액 환산 대상입니다.</small>
+            <div class="input-wrap"><input data-field="assetMembership" inputmode="numeric" placeholder="골프·콘도 등" /><span>원</span></div>
+          </label>
+
+          <h2 class="form-subhead">⑤ 자동차</h2>
+          <label>
+            <span>자동차 <em>고급차 해당 시 전액환산</em></span>
+            <small class="field-note">고급자동차 기준: 배기량 4,000cc 이상 또는 차량가액 3,000만원 이상. 고급자동차는 기본재산 공제 없이 전액 소득환산 적용. 생업용 자동차는 1대에 한해 가액의 50%만 산정합니다.</small>
+            <div class="input-wrap"><input data-field="carValue" inputmode="numeric" placeholder="차량가액" /><span>원</span></div>
+          </label>
+          <label>
+            <span>자동차 배기량</span>
+            <div class="input-wrap"><input data-field="carCC" type="number" placeholder="예: 3000" /><span>cc</span></div>
+          </label>
+          <label>
+            <span>생업용 자동차</span>
+            <label class="inline-check">
+              <input data-field="carLivelihood" data-kind="checkbox" type="checkbox" />
+              <span>해당</span>
+            </label>
           </label>
           <button class="primary" type="submit">계산하기</button>
         </form>
