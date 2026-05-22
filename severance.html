@@ -5,15 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>퇴직금 계산기 | PayCalc 계산기</title>
     <meta name="description" content="월급, 상여금, 연차수당, 근속기간을 입력해 예상 퇴직금을 계산하세요." />
-    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <header class="topbar">
-      <a class="brand" href="../index.html">PayCalc 계산기</a>
-      <nav><a href="../index.html#calculator">계산기</a><a href="../index.html#salary-table">연봉표</a></nav>
-    </header>
+  <a class="brand" href="./index.html">PayCalc 계산기</a>
+</header>
+<nav class="calc-nav" aria-label="계산기 전체 메뉴">
+  <a href="./index.html">연봉 실수령액</a>
+  <a href="./index.html#calculator" data-mode="bonus">성과급 세금</a>
+  <a href="./index.html#salary-table">연봉표</a>
+  <a href="./severance.html" class="current">퇴직금</a>
+  <a href="./inheritance-tax.html">상속세</a>
+  <a href="./gift-tax.html">증여세</a>
+  <a href="./year-end-tax.html">연말정산</a>
+  <a href="./unemployment.html">실업급여</a>
+  <a href="./weekly-holiday.html">주휴수당</a>
+  <a href="./monthly-pay.html">월급 계산기</a>
+  <a href="./hourly-wage.html">시급 계산기</a>
+  <a href="./retirement-income-tax.html">퇴직소득세</a>
+  <a href="./global-income-tax.html">종합소득세</a>
+  <a href="./capital-gains-tax.html">양도소득세</a>
+  <a href="./national-pension.html">국민연금</a>
+  <a href="./health-insurance.html">건강보험</a>
+  <a href="./parental-leave.html">육아휴직급여</a>
+  <a href="./basic-pension.html">기초연금</a>
+</nav>
     <main class="tool-page" data-calculator="severance">
-      <a class="back-link" href="../index.html#calculator-menu">← 계산기 메뉴</a>
       <section class="hero compact-hero">
         <div class="hero-copy">
           <h1>퇴직금 계산기</h1>
@@ -41,6 +59,6 @@
         <p>퇴직금은 계속근로기간 1년에 대해 30일분 이상의 평균임금을 지급하는 구조입니다. 이 계산기는 월 임금에 연간 상여금과 연차수당을 월 환산해 평균임금에 반영합니다.</p>
       </article>
     </main>
-    <script src="../tools.js"></script>
+    <script src="./tools.js"></script>
   </body>
 </html>
