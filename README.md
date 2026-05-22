@@ -1,2 +1,2 @@
-# Pay-calculator
-Paycalc 계산기
+﻿# Pay-calculator
+PayCalc 계산기
