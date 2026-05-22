@@ -1,2 +1,2 @@
 # Pay-calculator
-Paylab 계산기
+Paycalc 계산기
