@@ -29,6 +29,14 @@ function num(value) {
   return Number(String(value).replace(/[^\d.-]/g, "")) || 0;
 }
 
+function fallback(value, defaultValue) {
+  return value || defaultValue;
+}
+
+function zero(value) {
+  return value || 0;
+}
+
 function won(value) {
   return `${Math.round(value).toLocaleString("ko-KR")}원`;
 }
@@ -53,7 +61,7 @@ function inheritanceFinancialDeduction(financialAsset) {
 
 function inheritanceSpouseDeduction(data, taxableEstate) {
   if (data.hasSpouse !== "yes") return 0;
-  const actual = Math.max(0, data.spouseInherited);
+  const actual = Math.max(0, zero(data.spouseInherited));
   if (actual < 500000000) return 500000000;
   return Math.min(actual, 3000000000, Math.max(0, taxableEstate));
 }
@@ -78,7 +86,6 @@ function propertyScoreByAmount(amount) {
 }
 
 function regionalIncomeScore(annualIncome) {
-  if (annualIncome <= 0) return 0;
   if (annualIncome <= 1000000) return 0;
   return Math.max(0, (annualIncome / 10000) * 0.2837112);
 }
@@ -121,31 +128,33 @@ function payrollMonthly(monthlyPay, taxFree = 200000) {
 
 const calculators = {
   severance(data) {
-    const monthlyAverage = data.monthlyPay + data.annualBonus / 12 + data.annualLeavePay / 12;
+    const monthlyPay = fallback(data.monthlyPay, 3000000);
+    const months = fallback(data.months, 12);
+    const monthlyAverage = monthlyPay + zero(data.annualBonus) / 12 + zero(data.annualLeavePay) / 12;
     const dailyAvg = monthlyAverage / 30;
-    const days = data.months * 30.4167;
+    const days = months * 30.4167;
     const pay = dailyAvg * 30 * (days / 365);
-    render(pay, [["월 환산 평균임금", monthlyAverage], ["일 평균임금", dailyAvg], ["근속일수", days], ["예상 퇴직금", pay]]);
+    render(pay, [["월 환산 평균임금", monthlyAverage], ["1일 평균임금", dailyAvg], ["근속일수", days], ["예상 퇴직금", pay]]);
   },
   inheritance(data) {
+    const asset = fallback(data.asset, 2000000000);
     const funeral = data.funeral > 0 ? Math.min(Math.max(data.funeral, 5000000), 10000000) : 5000000;
-    const taxableEstate = Math.max(0, data.asset + data.giftAdded - data.debt - funeral);
+    const taxableEstate = Math.max(0, asset + zero(data.giftAdded) - zero(data.debt) - funeral);
     const personalDeduction =
       200000000 +
-      data.children * 50000000 +
-      data.minorYears * 10000000 +
-      data.elderlyCount * 50000000 +
-      data.disabledYears * 10000000;
+      zero(data.children) * 50000000 +
+      zero(data.minorYears) * 10000000 +
+      zero(data.elderlyCount) * 50000000 +
+      zero(data.disabledYears) * 10000000;
     const basicDeduction = Math.max(500000000, personalDeduction);
     const spouseDeduction = inheritanceSpouseDeduction(data, taxableEstate);
-    const financialDeduction = inheritanceFinancialDeduction(data.financialAsset);
+    const financialDeduction = inheritanceFinancialDeduction(zero(data.financialAsset));
     const totalDeduction = Math.min(taxableEstate, basicDeduction + spouseDeduction + financialDeduction);
-    const base = Math.max(0, taxableEstate - totalDeduction - data.appraisalFee);
+    const base = Math.max(0, taxableEstate - totalDeduction - zero(data.appraisalFee));
     const calculatedTax = taxByBracket(base, INHERITANCE_TAX_BRACKETS);
     const surchargeRate = data.generationSkip === "minorLarge" ? 0.4 : data.generationSkip === "yes" ? 0.3 : 0;
     const surcharge = calculatedTax * surchargeRate;
-    const tax = calculatedTax + surcharge;
-    render(tax, [
+    render(calculatedTax + surcharge, [
       ["상속세 과세가액", taxableEstate],
       ["일괄/인적공제", basicDeduction],
       ["배우자공제", spouseDeduction],
@@ -157,131 +166,136 @@ const calculators = {
     ]);
   },
   gift(data) {
+    const asset = fallback(data.asset, 250000000);
     const deductions = { spouse: 600000000, ascendant: 50000000, minorAscendant: 20000000, descendant: 50000000, relative: 10000000, other: 0 };
     const baseDeduction = deductions[data.relation] || data.deduction || 0;
     const marriageBirth = data.marriageBirth === "yes" && (data.relation === "ascendant" || data.relation === "minorAscendant") ? 100000000 : 0;
-    const base = Math.max(0, data.asset - baseDeduction - marriageBirth);
+    const base = Math.max(0, asset - baseDeduction - marriageBirth);
     const tax = taxByBracket(base, INHERITANCE_TAX_BRACKETS);
     render(tax, [["관계별 공제", baseDeduction], ["혼인·출산 추가공제", marriageBirth], ["과세표준", base], ["산출세액", tax]]);
   },
   yearEnd(data) {
-    const diff = data.paidTax - data.finalTax;
-    render(Math.abs(diff), [[diff >= 0 ? "예상 환급액" : "추가 납부액", Math.abs(diff)], ["결정세액", data.finalTax], ["기납부세액", data.paidTax]]);
+    const finalTax = fallback(data.finalTax, 2400000);
+    const paidTax = fallback(data.paidTax, 3000000);
+    const diff = paidTax - finalTax;
+    render(Math.abs(diff), [[diff >= 0 ? "예상 환급액" : "추가 납부액", Math.abs(diff)], ["결정세액", finalTax], ["기납부세액", paidTax]]);
   },
   unemployment(data) {
-    const daily = data.monthlyPay / 30;
+    const monthlyPay = fallback(data.monthlyPay, 3000000);
+    const days = fallback(data.days, 150);
+    const daily = monthlyPay / 30;
     const lower = 10320 * 8 * 0.8;
     const benefitDay = Math.min(68100, Math.max(lower, daily * 0.6));
-    render(benefitDay * data.days, [["1일 지급액", benefitDay], ["지급일수", `${data.days.toLocaleString("ko-KR")}일`], ["월 30일 환산", benefitDay * 30]]);
+    render(benefitDay * days, [["1일 지급액", benefitDay], ["지급일수", `${days.toLocaleString("ko-KR")}일`], ["월 30일 환산", benefitDay * 30]]);
   },
   weeklyHoliday(data) {
-    const holidayHours = Math.min(8, data.hours / 5);
-    const pay = data.hourly * holidayHours;
-    render(pay, [["주휴시간", `${holidayHours.toLocaleString("ko-KR")}시간`], ["시급", data.hourly], ["주휴수당", pay]]);
+    const hourly = fallback(data.hourly, 10320);
+    const hours = fallback(data.hours, 40);
+    const holidayHours = Math.min(8, hours / 5);
+    const pay = hourly * holidayHours;
+    render(pay, [["주휴시간", `${holidayHours.toLocaleString("ko-KR")}시간`], ["시급", hourly], ["주휴수당", pay]]);
   },
   monthlyPay(data) {
-    const result = payrollMonthly(data.monthlyPay, data.taxFree);
+    const result = payrollMonthly(fallback(data.monthlyPay, 3500000), fallback(data.taxFree, 200000));
     render(result.net, [["국민연금", result.ins.pension], ["건강보험", result.ins.health], ["장기요양", result.ins.care], ["고용보험", result.ins.employment], ["소득세", result.incomeTax], ["지방소득세", result.localTax], ["총 공제액", result.deduction]]);
   },
   hourlyWage(data) {
-    const holiday = Math.min(8, data.hours / 5);
-    const week = data.hourly * (data.hours + holiday);
-    render(week * 4.345, [["주급", week], ["주휴수당", data.hourly * holiday], ["월 환산", week * 4.345]]);
+    const hourly = fallback(data.hourly, 10320);
+    const hours = fallback(data.hours, 40);
+    const holiday = Math.min(8, hours / 5);
+    const week = hourly * (hours + holiday);
+    render(week * 4.345, [["주급", week], ["주휴수당", hourly * holiday], ["월 환산", week * 4.345]]);
   },
   retirementTax(data) {
-    const deduction = Math.min(data.amount, data.years * 4000000);
-    const base = Math.max(0, (data.amount - deduction) / Math.max(1, data.years) * 12);
-    const tax = (taxByBracket(base) / 12) * Math.max(1, data.years);
+    const amount = fallback(data.amount, 30000000);
+    const years = fallback(data.years, 5);
+    const deduction = Math.min(amount, years * 4000000);
+    const base = Math.max(0, (amount - deduction) / Math.max(1, years) * 12);
+    const tax = (taxByBracket(base) / 12) * Math.max(1, years);
     render(tax, [["근속연수공제 추정", deduction], ["환산 과세표준", base], ["퇴직소득세 추정", tax]]);
   },
   globalTax(data) {
-    const income = taxByBracket(data.taxBase);
+    const taxBase = fallback(data.taxBase, 50000000);
+    const income = taxByBracket(taxBase);
     const local = income * 0.1;
     render(income + local, [["소득세", income], ["지방소득세", local], ["합계", income + local]]);
   },
   capitalGains(data) {
-    const gain = Math.max(0, data.sale - data.buy - data.cost);
-    const holding = Math.max(0, data.holdingYears);
-    const living = Math.max(0, data.livingYears);
+    const sale = fallback(data.sale, 900000000);
+    const buy = fallback(data.buy, 500000000);
+    const cost = fallback(data.cost, 20000000);
+    const houses = fallback(data.houses, 1);
+    const gain = Math.max(0, sale - buy - cost);
+    const holding = Math.max(0, fallback(data.holdingYears, 10));
+    const living = Math.max(0, fallback(data.livingYears, 10));
     const isHouse = data.assetType === "house";
-    const oneHouse = isHouse && data.houses === 1 && data.resident === "yes";
+    const oneHouse = isHouse && houses === 1 && data.resident === "yes";
     const longTermRate = oneHouse && holding >= 3 ? Math.min(0.8, Math.min(10, holding) * 0.04 + Math.min(10, living) * 0.04) : holding >= 3 ? Math.min(0.3, holding * 0.02) : 0;
     const longTermDeduction = gain * longTermRate;
     const base = Math.max(0, gain - longTermDeduction - 2500000);
     let income = taxByBracket(base);
-    const surcharge = isHouse && data.houses >= 2 ? base * (data.houses >= 3 ? 0.3 : 0.2) : 0;
+    const surcharge = isHouse && houses >= 2 ? base * (houses >= 3 ? 0.3 : 0.2) : 0;
     income += surcharge;
     const local = income * 0.1;
     render(income + local, [["양도차익", gain], ["장기보유특별공제", longTermDeduction], ["과세표준", base], ["중과 추정", surcharge], ["양도소득세", income], ["지방소득세", local]]);
   },
   pension(data) {
-    const employee = data.monthlyPay * RATES.pension;
+    const monthlyPay = fallback(data.monthlyPay, 4000000);
+    const employee = monthlyPay * RATES.pension;
     render(employee, [["근로자 부담", employee], ["사용자 부담", employee], ["총 보험료", employee * 2]]);
   },
   health(data) {
     if (data.subscriberType === "local") {
-      const propertyBase = Math.max(0, data.propertyTaxBase + data.rentDeposit * 0.3 - (data.propertyDeduction || 100000000));
+      const propertyBase = Math.max(0, zero(data.propertyTaxBase) + zero(data.rentDeposit) * 0.3 - (data.propertyDeduction || 100000000));
       const propertyScore = data.propertyScore || propertyScoreByAmount(propertyBase);
-      const incomeScore = data.incomeScore || regionalIncomeScore(data.extraIncome);
+      const incomeScore = data.incomeScore || regionalIncomeScore(zero(data.extraIncome));
       const health = Math.max(19780, (incomeScore + propertyScore) * RATES.regionalPoint);
       const care = health * RATES.care;
-      render(health + care, [
-        ["소득점수", incomeScore.toFixed(1)],
-        ["재산 반영액", propertyBase],
-        ["재산점수", propertyScore.toFixed(1)],
-        ["점수당 금액", `${RATES.regionalPoint.toLocaleString("ko-KR")}원`],
-        ["건강보험", health],
-        ["장기요양", care],
-      ]);
+      render(health + care, [["소득점수", incomeScore.toFixed(1)], ["재산 반영액", propertyBase], ["재산점수", propertyScore.toFixed(1)], ["점수당 금액", `${RATES.regionalPoint.toLocaleString("ko-KR")}원`], ["건강보험", health], ["장기요양", care]]);
       return;
     }
-    const health = data.monthlyPay * RATES.health + (Math.max(0, data.extraIncome - 20000000) / 12) * 0.0719;
+    const monthlyPay = fallback(data.monthlyPay, 4000000);
+    const health = monthlyPay * RATES.health + (Math.max(0, zero(data.extraIncome) - 20000000) / 12) * 0.0719;
     const care = health * RATES.care;
     render(health + care, [["건강보험", health], ["장기요양", care], ["총 부담액", health + care]]);
   },
   parental(data) {
     let total = 0;
-    const months = Math.max(0, Math.min(18, data.months));
+    const monthlyPay = fallback(data.monthlyPay, 3000000);
+    const months = Math.max(0, Math.min(18, fallback(data.months, 12)));
     for (let i = 1; i <= months; i += 1) {
       const cap = i <= 3 ? 2500000 : i <= 6 ? 2000000 : 1600000;
-      total += Math.min(data.monthlyPay, cap);
+      total += Math.min(monthlyPay, cap);
     }
-    render(total, [["휴직개월", `${months.toLocaleString("ko-KR")}개월`], ["월 통상임금", data.monthlyPay], ["예상 총 급여", total]]);
+    render(total, [["휴직개월", `${months.toLocaleString("ko-KR")}개월`], ["월 통상임금", monthlyPay], ["예상 총 급여", total]]);
   },
   basicPension(data) {
+    const age = fallback(data.age, 65);
     const criteria = data.household === "couple" ? { threshold: 3648000, base: 274010 } : { threshold: 2280000, base: 342510 };
     const baseAssets = { city: 135000000, town: 85000000, rural: 72500000 };
-    const earnedEval = Math.max(0, (data.earnedIncome - 1100000) * 0.7);
-    const spouseEarnedEval = data.household === "couple" ? Math.max(0, (data.spouseEarned - 1100000) * 0.7) : 0;
-    const publicIncome = data.npIncome + data.otherPublicIncome + data.disabilityPension;
-    const freeRentIncome = data.freeRentApply === "yes" && data.freeRentValue >= 600000000 ? data.freeRentValue * 0.0078 / 12 : 0;
-    const incomeEval = earnedEval + spouseEarnedEval + data.businessIncome + data.rentalIncome + data.interestIncome + publicIncome + data.spouseOther + freeRentIncome;
-    const generalAsset = data.assetBuilding + data.assetLand + data.assetDeposit + data.assetOther;
+    const earnedEval = Math.max(0, (zero(data.earnedIncome) - 1100000) * 0.7);
+    const spouseEarnedEval = data.household === "couple" ? Math.max(0, (zero(data.spouseEarned) - 1100000) * 0.7) : 0;
+    const publicIncome = zero(data.npIncome) + zero(data.otherPublicIncome) + zero(data.disabilityPension);
+    const freeRentValue = zero(data.freeRentValue);
+    const freeRentIncome = data.freeRentApply === "yes" && freeRentValue >= 600000000 ? freeRentValue * 0.0078 / 12 : 0;
+    const incomeEval = earnedEval + spouseEarnedEval + zero(data.businessIncome) + zero(data.rentalIncome) + zero(data.interestIncome) + publicIncome + zero(data.spouseOther) + freeRentIncome;
+    const generalAsset = zero(data.assetBuilding) + zero(data.assetLand) + zero(data.assetDeposit) + zero(data.assetOther);
     const generalNet = Math.max(0, generalAsset - (baseAssets[data.region] || baseAssets.town));
-    const financialNet = Math.max(0, data.financialAsset - 20000000);
-    const debt = data.debtLoan + data.debtDeposit;
-    const isLuxuryCar = data.carCC >= 4000 || data.carValue >= 30000000;
-    const carAsset = isLuxuryCar ? (data.carLivelihood === "yes" ? data.carValue * 0.5 : data.carValue) : 0;
-    const assetBase = Math.max(0, generalNet + financialNet - debt) + data.assetVessel + data.assetMembership + carAsset;
+    const financialNet = Math.max(0, zero(data.financialAsset) - 20000000);
+    const debt = zero(data.debtLoan) + zero(data.debtDeposit);
+    const carValue = zero(data.carValue);
+    const isLuxuryCar = zero(data.carCC) >= 4000 || carValue >= 30000000;
+    const carAsset = isLuxuryCar ? (data.carLivelihood === "yes" ? carValue * 0.5 : carValue) : 0;
+    const assetBase = Math.max(0, generalNet + financialNet - debt) + zero(data.assetVessel) + zero(data.assetMembership) + carAsset;
     const assetIncome = assetBase * (0.04 / 12);
     const recognized = incomeEval + assetIncome;
-    const eligible = data.age >= 65 && recognized <= criteria.threshold;
-    const nationalPensionDeduction = Math.max(0, Math.min(criteria.base * 0.5, (data.npIncome - criteria.base * 1.5) * 0.5));
+    const eligible = age >= 65 && recognized <= criteria.threshold;
+    const nationalPensionDeduction = Math.max(0, Math.min(criteria.base * 0.5, (zero(data.npIncome) - criteria.base * 1.5) * 0.5));
     let expected = eligible ? Math.max(criteria.base * 0.1, criteria.base - nationalPensionDeduction) : 0;
     if (eligible && data.household === "couple" && data.spouseApply === "yes") {
       expected *= 0.8;
     }
-    render(expected, [
-      ["수급 가능성", eligible ? "가능성 있음" : "기준 초과 또는 연령 미달"],
-      ["소득평가액", incomeEval],
-      ["재산 소득환산액", assetIncome],
-      ["일반재산 합계", generalAsset],
-      ["금융재산 공제 후", financialNet],
-      ["부채 차감", debt],
-      ["고급자동차 반영액", carAsset],
-      ["소득인정액", recognized],
-      ["선정기준액", criteria.threshold],
-    ]);
+    render(expected, [["수급 가능성", eligible ? "가능성 있음" : "기준 초과 또는 연령 미달"], ["소득평가액", incomeEval], ["재산 소득환산액", assetIncome], ["일반재산 합계", generalAsset], ["금융재산 공제 후", financialNet], ["부채 차감", debt], ["고급자동차 반영액", carAsset], ["소득인정액", recognized], ["선정기준액", criteria.threshold]]);
   },
 };
 

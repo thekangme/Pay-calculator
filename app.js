@@ -56,6 +56,10 @@ function numberFromInput(value) {
   return Number(String(value).replace(/[^\d]/g, "")) || 0;
 }
 
+function fallback(value, defaultValue) {
+  return value || defaultValue;
+}
+
 function formatWon(value) {
   return `${Math.round(value).toLocaleString("ko-KR")}원`;
 }
@@ -145,18 +149,18 @@ function render(result) {
 }
 
 function calculateSalary() {
-  const annualSalary = numberFromInput(els.annualSalary.value);
-  const taxFreeMonthly = numberFromInput(els.taxFreeMonthly.value);
-  const dependents = Number(els.dependents.value) || 1;
+  const annualSalary = fallback(numberFromInput(els.annualSalary.value), 50000000);
+  const taxFreeMonthly = fallback(numberFromInput(els.taxFreeMonthly.value), 200000);
+  const dependents = fallback(Number(els.dependents.value), 1);
   const withholdingRate = Number(els.withholdingRate.value) || 1;
 
   render(calcMonthlySalary(annualSalary, taxFreeMonthly, dependents, withholdingRate));
 }
 
 function calculateBonus() {
-  const bonus = numberFromInput(els.bonusAmount.value);
-  const taxableAnnual = numberFromInput(els.taxableAnnual.value);
-  const dependents = Number(els.dependents.value) || 1;
+  const bonus = fallback(numberFromInput(els.bonusAmount.value), 10000000);
+  const taxableAnnual = fallback(numberFromInput(els.taxableAnnual.value), 58000000);
+  const dependents = fallback(Number(els.dependents.value), 1);
   const beforeTax = annualIncomeTax(Math.max(0, taxableAnnual - bonus), dependents);
   const afterTax = annualIncomeTax(taxableAnnual, dependents);
   const incomeTax = Math.max(0, afterTax - beforeTax);
