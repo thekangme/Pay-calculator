@@ -1,3 +1,109 @@
-﻿<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>건강보험 계산기 | PayCalc 계산기</title><meta name="description" content="2026년 건강보험료, 장기요양보험료, 보수 외 소득월액 보험료를 계산하세요."><link rel="stylesheet" href="./styles.css"></head><body><header class="topbar"><a class="brand" href="./index.html">PayCalc</a></header><main class="tool-page" data-calculator="health"><a class="back-link" href="./index.html#calculator-menu">← 계산기 메뉴</a><section class="hero compact-hero"><div class="hero-copy"><h1>건강보험 계산기</h1><p>직장가입자 본인부담, 장기요양보험, 보수 외 소득 보험료를 나눠 계산합니다.</p></div></section><section class="tool-layout"><form class="tool-card tool-form"><label><span>가입자 유형</span><select data-field="subscriberType" data-kind="text"><option value="employee" selected>직장가입자</option><option value="local">지역가입자 간이</option></select></label><label><span>월 보수</span><div class="input-wrap"><input data-field="monthlyPay" inputmode="numeric" value="4,000,000"><span>원</span></div></label><label><span>보수 외 연소득</span><div class="input-wrap"><input data-field="extraIncome" inputmode="numeric"><span>원</span></div></label><label><span>지역가입 재산점수</span><input data-field="propertyScore" type="number"></label><button class="primary" type="submit">계산하기</button></form><section class="tool-result" aria-live="polite"><p>총 부담액</p><strong data-main-result>0원</strong><dl class="result-list" data-breakdown></dl><p class="notice">2026년 건강보험 7.19%(근로자 3.595%), 장기요양 건강보험료의 13.14% 기준입니다. 최저보험료·상한액은 고시와 자격에 따라 달라질 수 있습니다.</p></section></section><article class="article-box"><h2>건강보험료 계산 기준</h2><p>직장가입자는 보수월액에 근로자 부담률을 적용합니다. 연 2,000만원을 초과하는 보수 외 소득은 소득월액 보험료가 추가될 수 있습니다.</p></article></main><script src="./tools.js"></script></body></html>
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>건강보험 계산기 | PayCalc 계산기</title>
+    <meta name="description" content="2026년 건강보험료, 장기요양보험료, 직장가입자와 지역가입자 재산점수를 계산하세요." />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="topbar"><a class="brand" href="./index.html">PayCalc</a></header>
+    <main class="tool-page" data-calculator="health">
+      <a class="back-link" href="./index.html#calculator-menu">← 계산기 메뉴</a>
+      <section class="hero compact-hero">
+        <div class="hero-copy">
+          <h1>건강보험 계산기</h1>
+          <p>직장가입자 본인부담과 지역가입자 소득·재산 보험료를 함께 계산합니다.</p>
+        </div>
+      </section>
 
+      <section class="criteria-grid" aria-label="건강보험 계산 기준">
+        <article><span>건강보험료율</span><strong>7.19%</strong><small>직장가입자 본인부담 3.595%</small></article>
+        <article><span>장기요양</span><strong>13.14%</strong><small>건강보험료에 곱해 산정</small></article>
+        <article><span>지역 점수당 금액</span><strong>211.5원</strong><small>2026년 시행령 기준</small></article>
+        <article><span>재산 기본공제</span><strong>1억원</strong><small>재산 과표에서 우선 차감</small></article>
+      </section>
 
+      <section class="tool-layout">
+        <form class="tool-card tool-form compact-form">
+          <h2 class="form-subhead">① 가입자 유형</h2>
+          <label>
+            <span>가입자 유형</span>
+            <select data-field="subscriberType" data-kind="text">
+              <option value="employee" selected>직장가입자</option>
+              <option value="local">지역가입자</option>
+            </select>
+          </label>
+          <label>
+            <span>월 보수</span>
+            <small class="field-note">직장가입자의 보수월액입니다. 근로자 부담분은 보수월액 × 3.595%로 계산합니다.</small>
+            <div class="input-wrap"><input data-field="monthlyPay" inputmode="numeric" /><span>원</span></div>
+          </label>
+
+          <h2 class="form-subhead">② 소득 보험료</h2>
+          <label>
+            <span>보수 외 연소득</span>
+            <small class="field-note">직장가입자는 연 2,000만원 초과분에 소득월액 보험료가 붙을 수 있습니다. 지역가입자는 연간 종합소득으로 입력하세요.</small>
+            <div class="input-wrap"><input data-field="extraIncome" inputmode="numeric" /><span>원</span></div>
+          </label>
+          <label>
+            <span>지역 소득점수 직접 입력</span>
+            <small class="field-note">공단 고지서의 소득점수를 알고 있으면 입력하세요. 비워두면 연소득 기준으로 간이 추정합니다.</small>
+            <input data-field="incomeScore" type="number" step="0.1" />
+          </label>
+
+          <h2 class="form-subhead">③ 지역가입 재산점수</h2>
+          <label>
+            <span>주택·건물·토지 과세표준</span>
+            <small class="field-note">재산세 과세표준 합계입니다. 시세가 아니라 재산세 과표 기준으로 입력해야 실제 점수와 가까워집니다.</small>
+            <div class="input-wrap"><input data-field="propertyTaxBase" inputmode="numeric" /><span>원</span></div>
+          </label>
+          <label>
+            <span>전·월세 보증금</span>
+            <small class="field-note">지역보험료 재산 산정 시 전월세 보증금은 통상 30%를 재산금액으로 환산해 반영합니다.</small>
+            <div class="input-wrap"><input data-field="rentDeposit" inputmode="numeric" /><span>원</span></div>
+          </label>
+          <label>
+            <span>재산 기본공제</span>
+            <small class="field-note">2026년 기준 간이 계산은 1억원 공제를 기본으로 둡니다. 다른 고지 기준을 적용하려면 금액을 바꿔 입력하세요.</small>
+            <div class="input-wrap"><input data-field="propertyDeduction" inputmode="numeric" placeholder="100,000,000" /><span>원</span></div>
+          </label>
+          <label>
+            <span>재산점수 직접 입력</span>
+            <small class="field-note">공단 고지서의 재산점수를 알고 있으면 입력하세요. 입력 시 위 재산 입력값보다 우선 적용됩니다.</small>
+            <input data-field="propertyScore" type="number" step="0.1" />
+          </label>
+
+          <button class="primary" type="submit">계산하기</button>
+        </form>
+
+        <section class="tool-result" aria-live="polite">
+          <p>총 부담액</p>
+          <strong data-main-result>0원</strong>
+          <dl class="result-list" data-breakdown></dl>
+          <p class="notice">지역가입자는 소득·재산·자동차, 경감 사유, 자격 변동에 따라 실제 고지액이 달라집니다. 자동차 보험료는 2024년 개편 이후 일반 차량 부과가 폐지된 흐름을 반영해 제외했습니다.</p>
+        </section>
+      </section>
+
+      <article class="article-box">
+        <h2>건강보험 지역가입자 재산점수 기준</h2>
+        <p>지역가입자는 소득과 재산을 점수로 바꾼 뒤 점수당 금액을 곱해 건강보험료를 산정합니다. 재산은 주택·건물·토지 재산세 과세표준과 전월세 보증금 환산액을 더하고 기본공제를 차감한 금액을 재산점수표에 넣습니다.</p>
+        <div class="table-wrap">
+          <table class="info-table compact-info-table">
+            <thead><tr><th>재산금액</th><th>간이 점수</th><th>설명</th></tr></thead>
+            <tbody>
+              <tr><td>공제 후 0원</td><td>0점</td><td>재산보험료 없음</td></tr>
+              <tr><td>450만원 이하</td><td>22점</td><td>최저 재산 구간</td></tr>
+              <tr><td>2,250만원 초과~2,700만원 이하</td><td>146점</td><td>시행령 별표4 예시 구간</td></tr>
+              <tr><td>6억 6,500만원 초과~7억 4,000만원 이하</td><td>921점</td><td>고액 재산 구간 예시</td></tr>
+              <tr><td>36억 3,000만원 초과~39억 9,300만원 이하</td><td>1,781점</td><td>상위 재산 구간 예시</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>정확한 등급표는 국민건강보험법 시행령 별표4의 재산보험료부과점수표를 따릅니다. 이 계산기는 전체 점수표를 단순화한 간이 추정이므로, 고지서의 재산점수를 알고 있다면 “재산점수 직접 입력”을 사용하는 편이 가장 정확합니다.</p>
+      </article>
+    </main>
+    <script src="./tools.js"></script>
+  </body>
+</html>

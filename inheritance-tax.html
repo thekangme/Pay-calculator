@@ -1,3 +1,136 @@
-﻿<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>상속세 계산기 | PayCalc 계산기</title><meta name="description" content="상속재산과 공제액을 입력해 예상 상속세를 계산하세요."><link rel="stylesheet" href="./styles.css"></head><body><header class="topbar"><a class="brand" href="./index.html">PayCalc</a></header><main class="tool-page" data-calculator="inheritance"><a class="back-link" href="./index.html#calculator-menu">← 계산기 메뉴</a><section class="hero compact-hero"><div class="hero-copy"><h1>상속세 계산기</h1><p>상속재산에서 공제액과 채무를 뺀 과세표준으로 예상 세액을 계산합니다.</p></div></section><section class="tool-layout"><form class="tool-card tool-form"><label><span>상속재산</span><div class="input-wrap"><input data-field="asset" inputmode="numeric" value="1,000,000,000"><span>원</span></div></label><label><span>채무·장례비 등</span><div class="input-wrap"><input data-field="debt" inputmode="numeric" value="50,000,000"><span>원</span></div></label><label><span>상속공제</span><div class="input-wrap"><input data-field="deduction" inputmode="numeric" value="500,000,000"><span>원</span></div></label><button class="primary" type="submit">계산하기</button></form><section class="tool-result" aria-live="polite"><p>예상 상속세</p><strong data-main-result>0원</strong><dl class="result-list" data-breakdown></dl><p class="notice">상속세는 가족관계, 배우자공제, 금융재산공제 등에 따라 크게 달라지는 추정값입니다.</p></section></section><article class="article-box"><h2>상속세 계산 기준</h2><p>상속세는 과세표준에 10~50% 누진세율을 적용하고 누진공제를 차감합니다. 실제 신고 전에는 세무 전문가 검토가 필요합니다.</p></article></main><script src="./tools.js"></script></body></html>
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>상속세 계산기 | PayCalc 계산기</title>
+    <meta name="description" content="상속재산, 채무, 배우자공제, 일괄공제, 금융재산공제, 세대생략 할증을 반영해 예상 상속세를 계산하세요." />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="topbar"><a class="brand" href="./index.html">PayCalc</a></header>
+    <main class="tool-page" data-calculator="inheritance">
+      <a class="back-link" href="./index.html#calculator-menu">← 계산기 메뉴</a>
+      <section class="hero compact-hero">
+        <div class="hero-copy">
+          <h1>상속세 계산기</h1>
+          <p>상속재산에서 채무와 주요 상속공제를 차감한 뒤 누진세율로 예상 세액을 계산합니다.</p>
+        </div>
+      </section>
 
+      <section class="criteria-grid" aria-label="상속세 주요 기준">
+        <article><span>상속세율</span><strong>10~50%</strong><small>과세표준 1억~30억 초과 구간</small></article>
+        <article><span>일괄공제</span><strong>5억원</strong><small>기초+인적공제와 비교해 큰 금액</small></article>
+        <article><span>배우자공제</span><strong>5억~30억원</strong><small>실제 상속분과 법정 한도 내 적용</small></article>
+        <article><span>금융재산공제</span><strong>최대 2억원</strong><small>순금융재산 구간별 공제</small></article>
+      </section>
 
+      <section class="tool-layout">
+        <form class="tool-card tool-form compact-form">
+          <h2 class="form-subhead">① 상속재산과 차감 항목</h2>
+          <label>
+            <span>총 상속재산</span>
+            <small class="field-note">부동산, 예금, 주식, 보험금, 차량 등 상속개시일 현재 재산가액 합계입니다.</small>
+            <div class="input-wrap"><input data-field="asset" inputmode="numeric" /><span>원</span></div>
+          </label>
+          <label>
+            <span>채무·공과금</span>
+            <small class="field-note">피상속인의 대출, 임대보증금 반환채무, 미납세금 등 증빙 가능한 채무를 입력합니다.</small>
+            <div class="input-wrap"><input data-field="debt" inputmode="numeric" /><span>원</span></div>
+          </label>
+          <label>
+            <span>장례비용</span>
+            <small class="field-note">장례비는 통상 500만원까지 인정되고, 증빙이 있으면 1,000만원 한도에서 반영합니다.</small>
+            <div class="input-wrap"><input data-field="funeral" inputmode="numeric" /><span>원</span></div>
+          </label>
+          <label>
+            <span>사전증여재산</span>
+            <small class="field-note">상속인은 10년, 상속인이 아닌 자는 5년 이내 증여재산이 상속세 과세가액에 합산될 수 있습니다.</small>
+            <div class="input-wrap"><input data-field="giftAdded" inputmode="numeric" /><span>원</span></div>
+          </label>
+
+          <h2 class="form-subhead">② 상속인과 공제</h2>
+          <label>
+            <span>배우자 생존 여부</span>
+            <select data-field="hasSpouse" data-kind="text">
+              <option value="yes">있음</option>
+              <option value="no">없음</option>
+            </select>
+          </label>
+          <label>
+            <span>배우자 실제 상속액</span>
+            <small class="field-note">배우자가 실제 상속받은 금액입니다. 배우자공제는 최소 5억원, 최대 30억원 범위에서 적용됩니다.</small>
+            <div class="input-wrap"><input data-field="spouseInherited" inputmode="numeric" /><span>원</span></div>
+          </label>
+          <label>
+            <span>자녀 수</span>
+            <small class="field-note">자녀 인적공제는 1인당 5,000만원입니다. 일괄공제 5억원보다 큰 경우에만 유리합니다.</small>
+            <input data-field="children" type="number" min="0" />
+          </label>
+          <label>
+            <span>미성년자 잔여연수 합계</span>
+            <small class="field-note">미성년 상속인은 19세까지 남은 연수 1년당 1,000만원을 추가 공제합니다.</small>
+            <input data-field="minorYears" type="number" min="0" />
+          </label>
+          <label>
+            <span>65세 이상 인원</span>
+            <small class="field-note">연로자공제는 65세 이상 상속인 1인당 5,000만원입니다.</small>
+            <input data-field="elderlyCount" type="number" min="0" />
+          </label>
+          <label>
+            <span>장애인 기대여명 연수 합계</span>
+            <small class="field-note">장애인공제는 기대여명 연수 1년당 1,000만원을 반영하는 방식입니다.</small>
+            <input data-field="disabledYears" type="number" min="0" />
+          </label>
+
+          <h2 class="form-subhead">③ 추가 공제와 세액 조정</h2>
+          <label>
+            <span>순금융재산</span>
+            <small class="field-note">금융재산에서 금융채무를 뺀 금액입니다. 2,000만원 이하 전액, 1억원 초과~10억원 이하 20%, 10억원 초과는 2억원을 공제합니다.</small>
+            <div class="input-wrap"><input data-field="financialAsset" inputmode="numeric" /><span>원</span></div>
+          </label>
+          <label>
+            <span>감정평가수수료</span>
+            <small class="field-note">상속세 과세표준 계산 시 차감 가능한 평가 관련 수수료를 입력합니다.</small>
+            <div class="input-wrap"><input data-field="appraisalFee" inputmode="numeric" /><span>원</span></div>
+          </label>
+          <label>
+            <span>세대생략 상속</span>
+            <select data-field="generationSkip" data-kind="text">
+              <option value="no">해당 없음</option>
+              <option value="yes">직계비속 세대생략 30%</option>
+              <option value="minorLarge">미성년자 20억원 초과 40%</option>
+            </select>
+          </label>
+          <button class="primary" type="submit">계산하기</button>
+        </form>
+
+        <section class="tool-result" aria-live="polite">
+          <p>예상 상속세</p>
+          <strong data-main-result>0원</strong>
+          <dl class="result-list" data-breakdown></dl>
+          <p class="notice">상속세는 재산 평가, 사전증여, 상속인 구성, 배우자 법정상속분에 따라 달라집니다. 이 계산기는 신고 전 검토용 추정값입니다.</p>
+        </section>
+      </section>
+
+      <article class="article-box">
+        <h2>상속세 계산 기준</h2>
+        <p>상속세는 상속재산에 사전증여재산을 더하고 채무·공과금·장례비를 뺀 상속세 과세가액에서 상속공제와 감정평가수수료를 차감해 과세표준을 구합니다. 이후 과세표준에 10%, 20%, 30%, 40%, 50% 누진세율을 적용하고 누진공제액을 뺍니다.</p>
+        <div class="table-wrap">
+          <table class="info-table">
+            <thead><tr><th>과세표준</th><th>세율</th><th>누진공제</th></tr></thead>
+            <tbody>
+              <tr><td>1억원 이하</td><td>10%</td><td>없음</td></tr>
+              <tr><td>5억원 이하</td><td>20%</td><td>1,000만원</td></tr>
+              <tr><td>10억원 이하</td><td>30%</td><td>6,000만원</td></tr>
+              <tr><td>30억원 이하</td><td>40%</td><td>1억 6,000만원</td></tr>
+              <tr><td>30억원 초과</td><td>50%</td><td>4억 6,000만원</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>배우자가 있으면 배우자 상속공제가 적용됩니다. 실제 상속받은 금액이 없거나 5억원 미만이면 5억원, 5억원 이상이면 실제 상속액을 기준으로 하되 최대 30억원 한도가 적용됩니다. 금융재산공제는 순금융재산 기준으로 계산하며, 일괄공제 5억원은 기초공제 2억원과 인적공제 합계보다 큰 경우 선택하는 구조입니다.</p>
+      </article>
+    </main>
+    <script src="./tools.js"></script>
+  </body>
+</html>
