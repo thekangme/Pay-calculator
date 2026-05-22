@@ -927,3 +927,9 @@ footer p {
 .article-box ul {
   padding-left: 18px;
 }
+
+input::placeholder,
+textarea::placeholder {
+  color: #aeb8c4;
+  opacity: 0.45;
+}
