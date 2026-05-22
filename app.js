@@ -69,6 +69,10 @@ function formatManwon(value) {
   return `${manwon.toLocaleString("ko-KR")}만원`;
 }
 
+function formatTableWon(value) {
+  return `${Math.round(value / 10000).toLocaleString("ko-KR")}만`;
+}
+
 function formatPercent(value) {
   return `${(value * 100).toFixed(1)}%`;
 }
@@ -189,15 +193,15 @@ function renderSalaryTable() {
       return `
         <tr>
           <th scope="row">${formatSalary(salary)}</th>
-          <td>${formatWon(result.net)}</td>
-          <td>${formatWon(result.gross)}</td>
-          <td>${formatWon(result.insuranceTotal + taxTotal)}</td>
-          <td>${formatWon(result.insurance.pension)}</td>
-          <td>${formatWon(result.insurance.health)}</td>
-          <td>${formatWon(result.insurance.care)}</td>
-          <td>${formatWon(result.insurance.employment)}</td>
-          <td>${formatWon(result.incomeTax)}</td>
-          <td>${formatWon(result.localTax)}</td>
+          <td>${formatTableWon(result.net)}</td>
+          <td>${formatTableWon(result.gross)}</td>
+          <td>${formatTableWon(result.insuranceTotal + taxTotal)}</td>
+          <td>${formatTableWon(result.insurance.pension)}</td>
+          <td>${formatTableWon(result.insurance.health)}</td>
+          <td>${formatTableWon(result.insurance.care)}</td>
+          <td>${formatTableWon(result.insurance.employment)}</td>
+          <td>${formatTableWon(result.incomeTax)}</td>
+          <td>${formatTableWon(result.localTax)}</td>
         </tr>
       `;
     })
@@ -233,12 +237,12 @@ function insertMainResetButton() {
   row.append(reset, submit);
 
   reset.addEventListener("click", () => {
-    els.annualSalary.value = "50,000,000";
-    els.taxFreeMonthly.value = "200,000";
-    els.dependents.value = "1";
+    els.annualSalary.value = "";
+    els.taxFreeMonthly.value = "";
+    els.dependents.value = "";
     els.withholdingRate.value = "1";
-    els.bonusAmount.value = "10,000,000";
-    els.taxableAnnual.value = "58,000,000";
+    els.bonusAmount.value = "";
+    els.taxableAnnual.value = "";
     els.includeBonusInsurance.checked = true;
     calculate();
   });

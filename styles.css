@@ -473,14 +473,14 @@ dd {
 
 table {
   width: 100%;
-  min-width: 1180px;
+  min-width: 820px;
   table-layout: auto;
   border-collapse: collapse;
 }
 
 th,
 td {
-  padding: 11px 14px;
+  padding: 9px 8px;
   border-bottom: 1px solid #edf1f4;
   text-align: right;
   white-space: nowrap;
@@ -494,11 +494,11 @@ td:first-child {
 th {
   background: #f0f5f7;
   color: var(--muted);
-  font-size: 0.84rem;
+  font-size: 0.78rem;
 }
 
 td {
-  font-size: 0.92rem;
+  font-size: 0.84rem;
   font-weight: 760;
 }
 
@@ -815,14 +815,18 @@ footer p {
     border-radius: 6px;
   }
 
+  table {
+    min-width: 680px;
+  }
+
   th,
   td {
-    padding: 10px 12px;
-    font-size: 0.82rem;
+    padding: 7px 5px;
+    font-size: 0.68rem;
   }
 
   td:last-child {
-    font-size: 0.82rem;
+    font-size: 0.68rem;
   }
 
   .calculator-menu {
@@ -874,12 +878,10 @@ footer p {
   }
 
   .compact-form .field-note {
-    display: -webkit-box;
-    overflow: hidden;
-    font-size: 0.66rem;
-    line-height: 1.35;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
+    display: block;
+    overflow: visible;
+    font-size: 0.58rem;
+    line-height: 1.24;
   }
 
   .compact-form input,

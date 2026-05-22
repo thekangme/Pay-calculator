@@ -22,6 +22,7 @@ const RATES = {
   health: 0.03595,
   care: 0.1314,
   employment: 0.009,
+  regionalPoint: 211.5,
 };
 
 function num(value) {
@@ -40,6 +41,46 @@ function taxByBracket(base, brackets = TAX_BRACKETS) {
 
 function sum(object) {
   return Object.values(object).reduce((total, value) => total + value, 0);
+}
+
+function inheritanceFinancialDeduction(financialAsset) {
+  if (financialAsset <= 0) return 0;
+  if (financialAsset <= 20000000) return financialAsset;
+  if (financialAsset <= 100000000) return 20000000;
+  if (financialAsset <= 1000000000) return financialAsset * 0.2;
+  return 200000000;
+}
+
+function inheritanceSpouseDeduction(data, taxableEstate) {
+  if (data.hasSpouse !== "yes") return 0;
+  const actual = Math.max(0, data.spouseInherited);
+  if (actual < 500000000) return 500000000;
+  return Math.min(actual, 3000000000, Math.max(0, taxableEstate));
+}
+
+function propertyScoreByAmount(amount) {
+  const manwon = Math.max(0, amount) / 10000;
+  const brackets = [
+    [0, 0], [450, 22], [900, 44], [1350, 66], [1800, 97], [2250, 122], [2700, 146],
+    [3150, 171], [3600, 195], [4050, 219], [4500, 244], [5020, 268], [5590, 294],
+    [6220, 320], [6930, 344], [7710, 365], [8590, 386], [9570, 412], [10660, 439],
+    [11870, 465], [13220, 490], [14800, 516], [16400, 535], [18300, 559], [20400, 586],
+    [22700, 611], [25300, 637], [28100, 659], [31300, 681], [34900, 706], [38800, 731],
+    [43200, 757], [48100, 785], [53600, 812], [59600, 841], [66500, 881], [74000, 921],
+    [82400, 961], [91800, 1001], [102000, 1041], [113600, 1091], [126500, 1141],
+    [140900, 1191], [156800, 1241], [174600, 1291], [194400, 1341], [216500, 1391],
+    [241100, 1441], [268500, 1491], [299000, 1541], [332900, 1591], [363000, 1681],
+    [399300, 1781],
+  ];
+  const found = brackets.find(([limit]) => manwon <= limit);
+  if (found) return found[1];
+  return 1781 + Math.ceil((manwon - 399300) / 50000) * 50;
+}
+
+function regionalIncomeScore(annualIncome) {
+  if (annualIncome <= 0) return 0;
+  if (annualIncome <= 1000000) return 0;
+  return Math.max(0, (annualIncome / 10000) * 0.2837112);
 }
 
 function insurance(monthlyPay) {
@@ -87,9 +128,33 @@ const calculators = {
     render(pay, [["월 환산 평균임금", monthlyAverage], ["일 평균임금", dailyAvg], ["근속일수", days], ["예상 퇴직금", pay]]);
   },
   inheritance(data) {
-    const base = Math.max(0, data.asset - data.debt - data.deduction);
-    const tax = taxByBracket(base, INHERITANCE_TAX_BRACKETS);
-    render(tax, [["과세표준", base], ["산출세액", tax]]);
+    const funeral = data.funeral > 0 ? Math.min(Math.max(data.funeral, 5000000), 10000000) : 5000000;
+    const taxableEstate = Math.max(0, data.asset + data.giftAdded - data.debt - funeral);
+    const personalDeduction =
+      200000000 +
+      data.children * 50000000 +
+      data.minorYears * 10000000 +
+      data.elderlyCount * 50000000 +
+      data.disabledYears * 10000000;
+    const basicDeduction = Math.max(500000000, personalDeduction);
+    const spouseDeduction = inheritanceSpouseDeduction(data, taxableEstate);
+    const financialDeduction = inheritanceFinancialDeduction(data.financialAsset);
+    const totalDeduction = Math.min(taxableEstate, basicDeduction + spouseDeduction + financialDeduction);
+    const base = Math.max(0, taxableEstate - totalDeduction - data.appraisalFee);
+    const calculatedTax = taxByBracket(base, INHERITANCE_TAX_BRACKETS);
+    const surchargeRate = data.generationSkip === "minorLarge" ? 0.4 : data.generationSkip === "yes" ? 0.3 : 0;
+    const surcharge = calculatedTax * surchargeRate;
+    const tax = calculatedTax + surcharge;
+    render(tax, [
+      ["상속세 과세가액", taxableEstate],
+      ["일괄/인적공제", basicDeduction],
+      ["배우자공제", spouseDeduction],
+      ["금융재산공제", financialDeduction],
+      ["총 상속공제", totalDeduction],
+      ["과세표준", base],
+      ["산출세액", calculatedTax],
+      ["세대생략 할증", surcharge],
+    ]);
   },
   gift(data) {
     const deductions = { spouse: 600000000, ascendant: 50000000, minorAscendant: 20000000, descendant: 50000000, relative: 10000000, other: 0 };
@@ -155,10 +220,19 @@ const calculators = {
   },
   health(data) {
     if (data.subscriberType === "local") {
-      const incomeScore = Math.max(0, data.extraIncome / 1000000) * 1.4;
-      const health = Math.max(20160, (incomeScore + data.propertyScore) * 208.4);
+      const propertyBase = Math.max(0, data.propertyTaxBase + data.rentDeposit * 0.3 - (data.propertyDeduction || 100000000));
+      const propertyScore = data.propertyScore || propertyScoreByAmount(propertyBase);
+      const incomeScore = data.incomeScore || regionalIncomeScore(data.extraIncome);
+      const health = Math.max(19780, (incomeScore + propertyScore) * RATES.regionalPoint);
       const care = health * RATES.care;
-      render(health + care, [["소득점수 추정", incomeScore], ["건강보험", health], ["장기요양", care]]);
+      render(health + care, [
+        ["소득점수", incomeScore.toFixed(1)],
+        ["재산 반영액", propertyBase],
+        ["재산점수", propertyScore.toFixed(1)],
+        ["점수당 금액", `${RATES.regionalPoint.toLocaleString("ko-KR")}원`],
+        ["건강보험", health],
+        ["장기요양", care],
+      ]);
       return;
     }
     const health = data.monthlyPay * RATES.health + (Math.max(0, data.extraIncome - 20000000) / 12) * 0.0719;
@@ -268,8 +342,6 @@ function insertResetButton(form) {
         input.selectedIndex = 0;
       } else if (input.type === "checkbox") {
         input.checked = input.defaultChecked;
-      } else if (input.type === "number") {
-        input.value = input.defaultValue || "";
       } else {
         input.value = "";
       }
