@@ -1,0 +1,561 @@
+:root {
+  color-scheme: light;
+  --ink: #17202a;
+  --muted: #5d6878;
+  --line: #d9e0e8;
+  --paper: #f6f9fb;
+  --panel: #ffffff;
+  --accent: #0e7c86;
+  --accent-dark: #095860;
+  --gold: #b57718;
+  --green: #23784d;
+  --shadow: 0 4px 24px rgba(26, 43, 67, 0.10);
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: Pretendard, "Noto Sans KR", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.6;
+  font-size: 15px;
+}
+
+a { color: inherit; }
+
+/* ── 상단바 ── */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 54px;
+  padding: 0 5vw;
+  border-bottom: 1px solid rgba(217,224,232,0.8);
+  background: rgba(251,252,254,0.95);
+  backdrop-filter: blur(14px);
+}
+
+.brand {
+  font-size: 1.05rem;
+  font-weight: 800;
+  text-decoration: none;
+  color: var(--accent-dark);
+  letter-spacing: -0.02em;
+}
+
+nav {
+  display: flex;
+  gap: 16px;
+  color: var(--muted);
+  font-size: 0.9rem;
+  flex-wrap: wrap;
+}
+
+nav a { text-decoration: none; font-weight: 600; }
+nav a:hover { color: var(--accent-dark); }
+
+/* ── 히어로 ── */
+.hero {
+  display: block;
+  min-height: 0;
+  padding: 20px 5vw 16px;
+  background:
+    linear-gradient(120deg, rgba(14,124,134,0.13), transparent 36%),
+    linear-gradient(315deg, rgba(181,119,24,0.13), transparent 34%),
+    #f0f6f7;
+}
+
+.compact-hero {
+  min-height: 0;
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+
+.hero-copy { max-width: 980px; }
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: var(--accent-dark);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+h1, h2, h3, p { margin-top: 0; }
+
+h1 {
+  margin-bottom: 12px;
+  font-size: clamp(1.4rem, 4vw, 3rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.compact-hero h1 {
+  margin-bottom: 4px;
+  font-size: clamp(1.2rem, 3vw, 1.75rem);
+}
+
+.hero-copy p:last-child {
+  max-width: 620px;
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin-bottom: 0;
+}
+
+/* ── 계산기 메뉴 ── */
+.menu-band, .table-band {
+  padding: 24px 5vw;
+  border-top: 1px solid var(--line);
+  background: #ffffff;
+}
+
+.section-title { max-width: 760px; margin-bottom: 12px; }
+.section-title h2 {
+  margin-bottom: 8px;
+  font-size: clamp(1.2rem, 3vw, 1.75rem);
+  line-height: 1.2;
+}
+.section-title p:last-child { color: var(--muted); font-size: 0.9rem; }
+
+.calculator-menu {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(108px, 1fr));
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.calculator-menu a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 10px 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--muted);
+  font-size: 0.84rem;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+  transition: all 0.15s;
+  line-height: 1.3;
+  word-break: keep-all;
+}
+
+.calculator-menu a.active,
+.calculator-menu a:hover {
+  border-color: var(--accent);
+  background: rgba(14,124,134,0.08);
+  color: var(--accent-dark);
+}
+
+/* ── 워크스페이스 ── */
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(280px, 400px) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+  padding: 28px 5vw 48px;
+}
+
+.hero-panel, .control-panel, .results, .table-wrap {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+
+.hero-panel {
+  display: grid;
+  gap: 8px;
+  padding: 20px;
+}
+.hero-panel span, .hero-panel small { color: var(--muted); }
+.hero-panel strong {
+  color: var(--accent-dark);
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+}
+
+.control-panel, .results { padding: 20px; }
+
+/* ── 탭 ── */
+.tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-bottom: 20px;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #eef3f6;
+}
+
+button, input, select { font: inherit; }
+
+.tab, .primary {
+  min-height: 44px;
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.tab { background: transparent; color: var(--muted); }
+.tab.active {
+  background: var(--panel);
+  color: var(--ink);
+  box-shadow: 0 2px 10px rgba(26,43,67,0.1);
+}
+
+/* ── 패널 폼 ── */
+.panel-section { display: grid; gap: 14px; }
+
+label {
+  display: grid;
+  gap: 7px;
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.input-wrap {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 8px;
+}
+
+input, select {
+  width: 100%;
+  min-height: 48px;
+  border: 1.5px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+  padding: 0 13px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  transition: border-color 0.15s;
+}
+
+input:focus, select:focus, button:focus-visible {
+  outline: 3px solid rgba(14,124,134,0.25);
+  outline-offset: 2px;
+  border-color: var(--accent);
+}
+
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.check-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ink);
+  font-weight: 700;
+}
+.check-row input { width: 20px; min-height: 20px; }
+
+.primary {
+  width: 100%;
+  margin-top: 16px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 1rem;
+  letter-spacing: -0.01em;
+}
+.primary:hover { background: var(--accent-dark); }
+.primary:active { transform: translateY(1px); }
+
+.notice {
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+/* ── 결과 ── */
+.result-head {
+  display: grid;
+  gap: 4px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+}
+.result-head p { margin: 0; color: var(--muted); font-weight: 700; font-size: 0.88rem; }
+.result-head strong {
+  color: var(--accent-dark);
+  font-size: clamp(1.9rem, 5vw, 3.5rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+.result-head span { color: var(--muted); font-size: 0.88rem; }
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 16px 0;
+}
+
+.metric-grid article, .info-grid article {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.metric-grid article {
+  display: grid;
+  gap: 5px;
+  padding: 14px;
+}
+
+.metric-grid span, dt {
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.metric-grid strong { font-size: 1.05rem; font-weight: 800; }
+
+dt { display: grid; gap: 2px; }
+dt span { color: var(--accent-dark); font-size: 0.75rem; font-weight: 700; }
+
+.breakdown h2 { margin: 4px 0 10px; font-size: 1rem; }
+
+dl { display: grid; gap: 0; margin: 0; }
+
+dl div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 0;
+  border-bottom: 1px solid #edf1f4;
+}
+
+dd { margin: 0; font-weight: 800; font-size: 0.95rem; }
+
+/* ── 연봉표 ── */
+.table-band { background: #f0f6f7; }
+.table-wrap { overflow-x: auto; background: #fff; }
+
+table {
+  width: 100%;
+  min-width: 900px;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 11px 14px;
+  border-bottom: 1px solid #edf1f4;
+  text-align: right;
+  white-space: nowrap;
+}
+
+th:first-child, td:first-child { text-align: left; }
+th { background: #f0f5f7; color: var(--muted); font-size: 0.82rem; font-weight: 700; }
+td { font-size: 0.9rem; font-weight: 700; }
+td:last-child { color: var(--accent-dark); font-weight: 800; }
+
+/* ── 콘텐츠 밴드 ── */
+.content-band {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.7fr) minmax(0, 1.3fr);
+  gap: 24px;
+  padding: 40px 5vw 56px;
+  border-top: 1px solid var(--line);
+  background: #fff;
+}
+
+.content-band h2 { font-size: clamp(1.4rem, 3.5vw, 2.2rem); line-height: 1.15; }
+
+.info-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.info-grid article { padding: 16px; }
+.info-grid h3 { margin-bottom: 7px; font-size: 0.98rem; }
+.info-grid p { color: var(--muted); font-size: 0.88rem; line-height: 1.6; }
+
+/* ── 개별 페이지 ── */
+.tool-page { padding: 24px 5vw 48px; }
+
+.tool-layout {
+  display: grid;
+  grid-template-columns: minmax(280px, 400px) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.tool-card, .tool-result, .article-box {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+
+.tool-card, .tool-result { padding: 20px; }
+.tool-form { display: grid; gap: 14px; }
+.tool-result { display: grid; gap: 14px; }
+.tool-result strong {
+  color: var(--accent-dark);
+  font-size: clamp(1.6rem, 5vw, 2.8rem);
+  line-height: 1.1;
+}
+
+.result-list { display: grid; gap: 0; margin: 0; }
+.result-list div {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 10px 0;
+  border-bottom: 1px solid #edf1f4;
+}
+.result-list dt { color: var(--muted); font-size: 0.88rem; }
+
+.article-box { margin-top: 20px; padding: 20px; color: var(--muted); }
+.article-box h1 { color: var(--ink); font-size: clamp(1.3rem, 3vw, 1.8rem); margin-bottom: 12px; }
+.article-box h2, .article-box h3 { color: var(--ink); }
+
+.back-link {
+  display: inline-flex;
+  margin-bottom: 12px;
+  color: var(--accent-dark);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.ad-slot {
+  display: grid;
+  place-items: center;
+  min-height: 90px;
+  margin: 16px 0;
+  border: 1px dashed #b9c5cf;
+  border-radius: 8px;
+  background: #f6f9fb;
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+/* ── 푸터 ── */
+footer {
+  padding: 20px 5vw 32px;
+  font-size: 0.85rem;
+  color: var(--muted);
+  border-top: 1px solid var(--line);
+  background: #fff;
+}
+footer p { margin: 0 0 6px; line-height: 1.7; }
+footer a { color: var(--accent-dark); }
+
+/* ── 정보 테이블 ── */
+.info-table { width: 100%; min-width: 500px; margin: 12px 0 16px; }
+.info-table th, .info-table td { white-space: normal; vertical-align: top; }
+.article-box .table-wrap { box-shadow: none; }
+.article-box ul { padding-left: 18px; }
+
+/* ════════════════════════════
+   모바일 반응형 (개선)
+════════════════════════════ */
+@media (max-width: 860px) {
+  .workspace, .content-band, .tool-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .workspace { padding: 20px 4vw 36px; gap: 16px; }
+
+  .metric-grid { grid-template-columns: repeat(3, 1fr); }
+
+  .info-grid { grid-template-columns: 1fr; }
+
+  .calculator-menu {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 7px;
+  }
+}
+
+@media (max-width: 600px) {
+  body { font-size: 14px; }
+
+  .topbar {
+    padding: 0 16px;
+    min-height: 50px;
+  }
+
+  .brand { font-size: 1rem; }
+
+  nav { gap: 12px; font-size: 0.84rem; }
+
+  .hero { padding: 14px 4vw; }
+  .compact-hero h1 { font-size: 1.15rem; }
+  .hero-copy p:last-child { font-size: 0.85rem; }
+
+  .menu-band, .table-band { padding: 18px 4vw; }
+
+  .calculator-menu {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .calculator-menu a {
+    min-height: 42px;
+    padding: 8px 4px;
+    font-size: 0.78rem;
+    border-radius: 6px;
+  }
+
+  .control-panel, .results { padding: 16px; }
+
+  .tabs { margin-bottom: 16px; }
+  .tab { min-height: 40px; font-size: 0.9rem; }
+
+  input, select { min-height: 46px; font-size: 0.95rem; padding: 0 12px; }
+
+  .split { grid-template-columns: 1fr 1fr; gap: 8px; }
+
+  .primary { min-height: 50px; font-size: 1rem; margin-top: 14px; }
+
+  .result-head strong { font-size: 1.75rem; }
+
+  .metric-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin: 12px 0;
+  }
+
+  .metric-grid article { padding: 12px 10px; }
+  .metric-grid span { font-size: 0.76rem; }
+  .metric-grid strong { font-size: 0.95rem; }
+
+  dl div { padding: 10px 0; }
+  dd { font-size: 0.9rem; }
+  dt { font-size: 0.82rem; }
+  dt span { font-size: 0.72rem; }
+
+  .table-band { padding: 16px 3vw; }
+  th, td { padding: 9px 10px; font-size: 0.8rem; }
+
+  .tool-page { padding: 16px 4vw 36px; }
+  .tool-card, .tool-result { padding: 16px; }
+
+  footer { padding: 16px 4vw 24px; font-size: 0.82rem; }
+
+  .content-band { padding: 24px 4vw 36px; }
+}
+
+@media (max-width: 380px) {
+  .calculator-menu a { font-size: 0.72rem; padding: 7px 2px; min-height: 38px; }
+  .metric-grid strong { font-size: 0.88rem; }
+  .result-head strong { font-size: 1.5rem; }
+}

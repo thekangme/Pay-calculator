@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://paycalc.co.kr/sitemap.xml
