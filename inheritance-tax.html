@@ -1,147 +1,145 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="ko">
-  <head><!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-BC9GVJ99VT"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-BC9GVJ99VT');
-</script>
+  <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-BC9GVJ99VT"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-BC9GVJ99VT');
+    </script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>?곸냽??怨꾩궛湲?| PayCalc 怨꾩궛湲?/title>
-    <meta name="description" content="?곸냽?ъ궛, 梨꾨Т, 諛곗슦?먭났?? ?쇨큵怨듭젣, 湲덉쑖?ъ궛怨듭젣, ?몃??앸왂 ?좎쬆??諛섏쁺???덉긽 ?곸냽?몃? 怨꾩궛?섏꽭??" />
+    <title>상속세 계산기 | PayCalc 계산기</title>
+    <meta name="description" content="상속재산, 채무, 배우자공제, 일괄공제, 금융재산공제, 세대생략 할증을 반영해 예상 상속세를 계산하세요." />
     <link rel="stylesheet" href="./styles.css" />
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2177469467205257"
-     crossorigin="anonymous"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2177469467205257" crossorigin="anonymous"></script>
   </head>
   <body>
     <header class="topbar"><a class="brand" href="./index.html">PayCalc</a></header>
     <main class="tool-page" data-calculator="inheritance">
-      <a class="back-link" href="./index.html#calculator-menu">??怨꾩궛湲?硫붾돱</a>
+      <a class="back-link" href="./index.html#calculator-menu">← 계산기 메뉴</a>
       <section class="hero compact-hero">
         <div class="hero-copy">
-          <h1>?곸냽??怨꾩궛湲?/h1>
-          <p>?곸냽?ъ궛?먯꽌 梨꾨Т? 二쇱슂 ?곸냽怨듭젣瑜?李④컧?????꾩쭊?몄쑉濡??덉긽 ?몄븸??怨꾩궛?⑸땲??</p>
+          <h1>상속세 계산기</h1>
+          <p>상속재산에서 채무와 주요 상속공제를 차감한 뒤 누진세율로 예상 세액을 계산합니다.</p>
         </div>
       </section>
 
-      <section class="criteria-grid" aria-label="?곸냽??二쇱슂 湲곗?">
-        <article><span>?곸냽?몄쑉</span><strong>10~50%</strong><small>怨쇱꽭?쒖? 1??30??珥덇낵 援ш컙</small></article>
-        <article><span>?쇨큵怨듭젣</span><strong>5?듭썝</strong><small>湲곗큹+?몄쟻怨듭젣? 鍮꾧탳????湲덉븸</small></article>
-        <article><span>諛곗슦?먭났??/span><strong>5??30?듭썝</strong><small>?ㅼ젣 ?곸냽遺꾧낵 踰뺤젙 ?쒕룄 ???곸슜</small></article>
-        <article><span>湲덉쑖?ъ궛怨듭젣</span><strong>理쒕? 2?듭썝</strong><small>?쒓툑?듭옱??援ш컙蹂?怨듭젣</small></article>
+      <section class="criteria-grid" aria-label="상속세 주요 기준">
+        <article><span>상속세율</span><strong>10~50%</strong><small>과세표준 1억원~30억원 초과 구간</small></article>
+        <article><span>일괄공제</span><strong>5억원</strong><small>기초공제와 인적공제 합계와 비교</small></article>
+        <article><span>배우자공제</span><strong>5억~30억원</strong><small>실제 상속분과 법정 한도 내 적용</small></article>
+        <article><span>금융재산공제</span><strong>최대 2억원</strong><small>순금융재산 구간별 공제</small></article>
       </section>
 
       <section class="tool-layout">
         <form class="tool-card tool-form compact-form">
-          <h2 class="form-subhead">???곸냽?ъ궛怨?李④컧 ??ぉ</h2>
+          <h2 class="form-subhead">① 상속재산과 차감 항목</h2>
           <label>
-            <span>珥??곸냽?ъ궛</span>
-            <small class="field-note">遺?숈궛, ?덇툑, 二쇱떇, 蹂댄뿕湲? 李⑤웾 ???곸냽媛쒖떆???꾩옱 ?ъ궛媛???⑷퀎?낅땲??</small>
-            <div class="input-wrap"><input data-field="asset" inputmode="numeric" /><span>??/span></div>
+            <span>총 상속재산</span>
+            <small class="field-note">부동산, 예금, 주식, 보험금, 차량 등 상속개시일 현재 재산가액 합계입니다.</small>
+            <div class="input-wrap"><input data-field="asset" inputmode="numeric" /><span>원</span></div>
           </label>
           <label>
-            <span>梨꾨Т쨌怨듦낵湲?/span>
-            <small class="field-note">?쇱긽?띿씤???異? ?꾨?蹂댁쬆湲?諛섑솚梨꾨Т, 誘몃궔?멸툑 ??利앸튃 媛?ν븳 梨꾨Т瑜??낅젰?⑸땲??</small>
-            <div class="input-wrap"><input data-field="debt" inputmode="numeric" /><span>??/span></div>
+            <span>채무·공과금</span>
+            <small class="field-note">피상속인의 대출, 임대보증금 반환채무, 미납세금 등 증빙 가능한 채무를 입력합니다.</small>
+            <div class="input-wrap"><input data-field="debt" inputmode="numeric" /><span>원</span></div>
           </label>
           <label>
-            <span>?λ?鍮꾩슜</span>
-            <small class="field-note">?λ?鍮꾨뒗 ?듭긽 500留뚯썝源뚯? ?몄젙?섍퀬, 利앸튃???덉쑝硫?1,000留뚯썝 ?쒕룄?먯꽌 諛섏쁺?⑸땲??</small>
-            <div class="input-wrap"><input data-field="funeral" inputmode="numeric" /><span>??/span></div>
+            <span>장례비용</span>
+            <small class="field-note">장례비는 통상 500만원까지 인정되고, 증빙이 있으면 1,000만원 한도에서 반영합니다.</small>
+            <div class="input-wrap"><input data-field="funeral" inputmode="numeric" /><span>원</span></div>
           </label>
           <label>
-            <span>?ъ쟾利앹뿬?ъ궛</span>
-            <small class="field-note">?곸냽?몄? 10?? ?곸냽?몄씠 ?꾨땶 ?먮뒗 5???대궡 利앹뿬?ъ궛???곸냽??怨쇱꽭媛?≪뿉 ?⑹궛?????덉뒿?덈떎.</small>
-            <div class="input-wrap"><input data-field="giftAdded" inputmode="numeric" /><span>??/span></div>
+            <span>사전증여재산</span>
+            <small class="field-note">상속인은 10년, 상속인이 아닌 자는 5년 이내 증여재산이 상속세 과세가액에 합산될 수 있습니다.</small>
+            <div class="input-wrap"><input data-field="giftAdded" inputmode="numeric" /><span>원</span></div>
           </label>
 
-          <h2 class="form-subhead">???곸냽?멸낵 怨듭젣</h2>
+          <h2 class="form-subhead">② 상속인과 공제</h2>
           <label>
-            <span>諛곗슦???앹〈 ?щ?</span>
+            <span>배우자 생존 여부</span>
             <select data-field="hasSpouse" data-kind="text">
-              <option value="yes">?덉쓬</option>
-              <option value="no">?놁쓬</option>
+              <option value="yes">있음</option>
+              <option value="no">없음</option>
             </select>
           </label>
           <label>
-            <span>諛곗슦???ㅼ젣 ?곸냽??/span>
-            <small class="field-note">諛곗슦?먭? ?ㅼ젣 ?곸냽諛쏆? 湲덉븸?낅땲?? 諛곗슦?먭났?쒕뒗 理쒖냼 5?듭썝, 理쒕? 30?듭썝 踰붿쐞?먯꽌 ?곸슜?⑸땲??</small>
-            <div class="input-wrap"><input data-field="spouseInherited" inputmode="numeric" /><span>??/span></div>
+            <span>배우자 실제 상속액</span>
+            <small class="field-note">배우자가 실제 상속받은 금액입니다. 배우자공제는 최소 5억원, 최대 30억원 범위에서 적용됩니다.</small>
+            <div class="input-wrap"><input data-field="spouseInherited" inputmode="numeric" /><span>원</span></div>
           </label>
           <label>
-            <span>?먮? ??/span>
-            <small class="field-note">?먮? ?몄쟻怨듭젣??1?몃떦 5,000留뚯썝?낅땲?? ?쇨큵怨듭젣 5?듭썝蹂대떎 ??寃쎌슦?먮쭔 ?좊━?⑸땲??</small>
+            <span>자녀 수</span>
+            <small class="field-note">자녀 인적공제는 1인당 5,000만원입니다. 일괄공제 5억원보다 큰 경우에만 유리합니다.</small>
             <input data-field="children" type="number" min="0" />
           </label>
           <label>
-            <span>誘몄꽦?꾩옄 ?붿뿬?곗닔 ?⑷퀎</span>
-            <small class="field-note">誘몄꽦???곸냽?몄? 19?멸퉴吏 ?⑥? ?곗닔 1?꾨떦 1,000留뚯썝??異붽? 怨듭젣?⑸땲??</small>
+            <span>미성년자 잔여연수 합계</span>
+            <small class="field-note">미성년 상속인은 19세까지 남은 연수 1년당 1,000만원을 추가 공제합니다.</small>
             <input data-field="minorYears" type="number" min="0" />
           </label>
           <label>
-            <span>65???댁긽 ?몄썝</span>
-            <small class="field-note">?곕줈?먭났?쒕뒗 65???댁긽 ?곸냽??1?몃떦 5,000留뚯썝?낅땲??</small>
+            <span>65세 이상 인원</span>
+            <small class="field-note">연로자공제는 65세 이상 상속인 1인당 5,000만원입니다.</small>
             <input data-field="elderlyCount" type="number" min="0" />
           </label>
           <label>
-            <span>?μ븷??湲곕??щ챸 ?곗닔 ?⑷퀎</span>
-            <small class="field-note">?μ븷?멸났?쒕뒗 湲곕??щ챸 ?곗닔 1?꾨떦 1,000留뚯썝??諛섏쁺?섎뒗 諛⑹떇?낅땲??</small>
+            <span>장애인 기대여명 연수 합계</span>
+            <small class="field-note">장애인공제는 기대여명 연수 1년당 1,000만원을 반영하는 방식입니다.</small>
             <input data-field="disabledYears" type="number" min="0" />
           </label>
 
-          <h2 class="form-subhead">??異붽? 怨듭젣? ?몄븸 議곗젙</h2>
+          <h2 class="form-subhead">③ 추가 공제와 세액 조정</h2>
           <label>
-            <span>?쒓툑?듭옱??/span>
-            <small class="field-note">湲덉쑖?ъ궛?먯꽌 湲덉쑖梨꾨Т瑜?類 湲덉븸?낅땲?? 2,000留뚯썝 ?댄븯 ?꾩븸, 1?듭썝 珥덇낵~10?듭썝 ?댄븯 20%, 10?듭썝 珥덇낵??2?듭썝??怨듭젣?⑸땲??</small>
-            <div class="input-wrap"><input data-field="financialAsset" inputmode="numeric" /><span>??/span></div>
+            <span>순금융재산</span>
+            <small class="field-note">금융재산에서 금융채무를 뺀 금액입니다. 2,000만원 이하 전액, 1억원 초과~10억원 이하 20%, 10억원 초과는 2억원을 공제합니다.</small>
+            <div class="input-wrap"><input data-field="financialAsset" inputmode="numeric" /><span>원</span></div>
           </label>
           <label>
-            <span>媛먯젙?됯??섏닔猷?/span>
-            <small class="field-note">?곸냽??怨쇱꽭?쒖? 怨꾩궛 ??李④컧 媛?ν븳 ?됯? 愿???섏닔猷뚮? ?낅젰?⑸땲??</small>
-            <div class="input-wrap"><input data-field="appraisalFee" inputmode="numeric" /><span>??/span></div>
+            <span>감정평가수수료</span>
+            <small class="field-note">상속세 과세표준 계산 시 차감 가능한 평가 관련 수수료를 입력합니다.</small>
+            <div class="input-wrap"><input data-field="appraisalFee" inputmode="numeric" /><span>원</span></div>
           </label>
           <label>
-            <span>?몃??앸왂 ?곸냽</span>
+            <span>세대생략 상속</span>
             <select data-field="generationSkip" data-kind="text">
-              <option value="no">?대떦 ?놁쓬</option>
-              <option value="yes">吏곴퀎鍮꾩냽 ?몃??앸왂 30%</option>
-              <option value="minorLarge">誘몄꽦?꾩옄 20?듭썝 珥덇낵 40%</option>
+              <option value="no">해당 없음</option>
+              <option value="yes">직계비속 세대생략 30%</option>
+              <option value="minorLarge">미성년자 20억원 초과 40%</option>
             </select>
           </label>
-          <button class="primary" type="submit">怨꾩궛?섍린</button>
+          <button class="primary" type="submit">계산하기</button>
         </form>
 
         <section class="tool-result" aria-live="polite">
-          <p>?덉긽 ?곸냽??/p>
-          <strong data-main-result>0??/strong>
+          <p>예상 상속세</p>
+          <strong data-main-result>0원</strong>
           <dl class="result-list" data-breakdown></dl>
-          <p class="notice">?곸냽?몃뒗 ?ъ궛 ?됯?, ?ъ쟾利앹뿬, ?곸냽??援ъ꽦, 諛곗슦??踰뺤젙?곸냽遺꾩뿉 ?곕씪 ?щ씪吏묐땲?? ??怨꾩궛湲곕뒗 ?좉퀬 ??寃?좎슜 異붿젙媛믪엯?덈떎.</p>
+          <p class="notice">상속세는 재산 평가, 사전증여, 상속인 구성, 배우자 법정상속분에 따라 달라집니다. 이 계산기는 신고 전 검토용 추정값입니다.</p>
         </section>
       </section>
 
       <article class="article-box">
-        <h2>?곸냽??怨꾩궛 湲곗?</h2>
-        <p>?곸냽?몃뒗 ?곸냽?ъ궛???ъ쟾利앹뿬?ъ궛???뷀븯怨?梨꾨Т쨌怨듦낵湲댟룹옣濡鍮꾨? 類 ?곸냽??怨쇱꽭媛?≪뿉???곸냽怨듭젣? 媛먯젙?됯??섏닔猷뚮? 李④컧??怨쇱꽭?쒖???援ы빀?덈떎. ?댄썑 怨쇱꽭?쒖???10%, 20%, 30%, 40%, 50% ?꾩쭊?몄쑉???곸슜?섍퀬 ?꾩쭊怨듭젣?≪쓣 類띾땲??</p>
+        <h2>상속세 계산 기준</h2>
+        <p>상속세는 상속재산에 사전증여재산을 더하고 채무·공과금·장례비를 뺀 상속세 과세가액에서 상속공제와 감정평가수수료를 차감해 과세표준을 구합니다. 이후 과세표준에 10%, 20%, 30%, 40%, 50% 누진세율을 적용하고 누진공제액을 뺍니다.</p>
         <div class="table-wrap">
           <table class="info-table">
-            <thead><tr><th>怨쇱꽭?쒖?</th><th>?몄쑉</th><th>?꾩쭊怨듭젣</th></tr></thead>
+            <thead><tr><th>과세표준</th><th>세율</th><th>누진공제</th></tr></thead>
             <tbody>
-              <tr><td>1?듭썝 ?댄븯</td><td>10%</td><td>?놁쓬</td></tr>
-              <tr><td>5?듭썝 ?댄븯</td><td>20%</td><td>1,000留뚯썝</td></tr>
-              <tr><td>10?듭썝 ?댄븯</td><td>30%</td><td>6,000留뚯썝</td></tr>
-              <tr><td>30?듭썝 ?댄븯</td><td>40%</td><td>1??6,000留뚯썝</td></tr>
-              <tr><td>30?듭썝 珥덇낵</td><td>50%</td><td>4??6,000留뚯썝</td></tr>
+              <tr><td>1억원 이하</td><td>10%</td><td>없음</td></tr>
+              <tr><td>5억원 이하</td><td>20%</td><td>1,000만원</td></tr>
+              <tr><td>10억원 이하</td><td>30%</td><td>6,000만원</td></tr>
+              <tr><td>30억원 이하</td><td>40%</td><td>1억 6,000만원</td></tr>
+              <tr><td>30억원 초과</td><td>50%</td><td>4억 6,000만원</td></tr>
             </tbody>
           </table>
         </div>
-        <p>諛곗슦?먭? ?덉쑝硫?諛곗슦???곸냽怨듭젣媛 ?곸슜?⑸땲?? ?ㅼ젣 ?곸냽諛쏆? 湲덉븸???녾굅??5?듭썝 誘몃쭔?대㈃ 5?듭썝, 5?듭썝 ?댁긽?대㈃ ?ㅼ젣 ?곸냽?≪쓣 湲곗??쇰줈 ?섎릺 理쒕? 30?듭썝 ?쒕룄媛 ?곸슜?⑸땲?? 湲덉쑖?ъ궛怨듭젣???쒓툑?듭옱??湲곗??쇰줈 怨꾩궛?섎ŉ, ?쇨큵怨듭젣 5?듭썝? 湲곗큹怨듭젣 2?듭썝怨??몄쟻怨듭젣 ?⑷퀎蹂대떎 ??寃쎌슦 ?좏깮?섎뒗 援ъ“?낅땲??</p>
+        <p>배우자가 있으면 배우자 상속공제가 적용됩니다. 실제 상속받은 금액이 없거나 5억원 미만이면 5억원, 5억원 이상이면 실제 상속액을 기준으로 하되 최대 30억원 한도가 적용됩니다. 금융재산공제는 순금융재산 기준으로 계산하며, 일괄공제 5억원은 기초공제 2억원과 인적공제 합계보다 큰 경우 선택하는 구조입니다.</p>
       </article>
     </main>
     <script src="./tools.js"></script>
   </body>
 </html>
-
